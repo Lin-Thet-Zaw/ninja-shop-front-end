@@ -26,27 +26,26 @@ export const register = (userData) => async (dispatch) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/signup`, userData);
     const user = response.data;
+
     if (user.jwt) {
       localStorage.setItem("jwt", user.jwt);
     }
-    // console.log("user", user);
+
     dispatch(reqisterSuccess(user.jwt));
-    toast.success("Register success!")
+    toast.success("Registration successful!");
   } catch (error) {
     let errorMessage = "An unknown error occurred.";
+
     if (error.response) {
-      // Server responded with a status code outside the 2xx range
-      errorMessage = error.response.data.message || "Server Error";
+      errorMessage = error.response.data.message || "Server Error occurred during registration.";
     } else if (error.request) {
-      // Request was made, but no response was received
-      errorMessage = "Network Error";
+      errorMessage = "Network Error: Unable to connect to the server.";
     } else {
-      // Something went wrong in setting up the request
       errorMessage = error.message;
     }
 
     dispatch(registerFailer(errorMessage));
-    toast.error(`Registration failed: ${errorMessage}`)
+    toast.error(`Registration failed: ${errorMessage}`);
   }
 };
 
@@ -66,24 +65,20 @@ export const login = (userData) => async (dispatch) => {
     }
 
     dispatch(loginSuccess(user));
-    toast.success("Login Successful!");
+    toast.success("Login successful!");
   } catch (error) {
-    // Check for AxiosError and provide a specific error message
     let errorMessage = "An unknown error occurred.";
+
     if (error.response) {
-      // Server responded with a status code outside the 2xx range
-      errorMessage = error.response.data.message || "Server Error";
+      errorMessage = error.response.data.message || "Invalid username or password.";
     } else if (error.request) {
-      // Request was made, but no response was received
-      errorMessage = "Network Error";
+      errorMessage = "Network Error: Unable to connect to the server.";
     } else {
-      // Something went wrong in setting up the request
       errorMessage = error.message;
     }
 
     dispatch(loginFailer(errorMessage));
-    console.error(error);
-    toast.error(`Login Failed: ${errorMessage}`);
+    toast.error(`Login failed: ${errorMessage}`);
   }
 };
 

@@ -32,7 +32,8 @@ export default function Navigation() {
   const [openAuthModal, setOpenModal] = useState(false);
   const [ancherEl, setAncherEl] = useState(null);
   const openUserMenu = Boolean(ancherEl);
-
+  const {products} = useSelector(store=>store)
+  console.log(products)
   const navigate = useNavigate();
   const location = useLocation();
 
