@@ -48,18 +48,33 @@ export const login = (userData) => async (dispatch) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/signin`, userData);
     const user = response.data;
+
     if (user.jwt) {
       localStorage.setItem("jwt", user.jwt);
     }
-    // console.log("user", user);
+
     dispatch(loginSuccess(user));
-    toast.success("Login Successfull!")
+    toast.success("Login Successful!");
   } catch (error) {
-    dispatch(loginFailer(error.message));
-    console.log(error)
-    toast.error("Login Failed: ", error.message)
+    // Check for AxiosError and provide a specific error message
+    let errorMessage = "An unknown error occurred.";
+    if (error.response) {
+      // Server responded with a status code outside the 2xx range
+      errorMessage = error.response.data.message || "Server Error";
+    } else if (error.request) {
+      // Request was made, but no response was received
+      errorMessage = "Network Error: Please check your internet connection.";
+    } else {
+      // Something went wrong in setting up the request
+      errorMessage = error.message;
+    }
+
+    dispatch(loginFailer(errorMessage));
+    console.error(error);
+    toast.error(`Login Failed: ${errorMessage}`);
   }
 };
+
 
 const getUserRequest = () => ({ type: GET_USER_REQUEST });
 const getUserSucces = (user) => ({ type: GET_USER_SUCCESS, payload: user });
