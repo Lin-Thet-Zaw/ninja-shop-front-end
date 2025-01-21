@@ -1,16 +1,24 @@
-import { Button, Grid, TextField, useMediaQuery, Box, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { getUser, register } from '../../State/Auth/Action';
-
+import {
+  Button,
+  Grid,
+  TextField,
+  useMediaQuery,
+  Box,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getUser, register } from "../../State/Auth/Action";
 const RegisterForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const jwt = localStorage.getItem('jwt');
+  const jwt = localStorage.getItem("jwt");
   const { auth } = useSelector((store) => store);
+  const isLoading = useSelector((state) => state.auth.isLoading);
 
-  const isSmallScreen = useMediaQuery('(max-width:600px)'); // Responsive detection
+  const isSmallScreen = useMediaQuery("(max-width:600px)"); // Responsive detection
 
   useEffect(() => {
     if (jwt) {
@@ -22,24 +30,24 @@ const RegisterForm = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const userData = {
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      password: data.get('password'),
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
+      email: data.get("email"),
+      password: data.get("password"),
     };
     dispatch(register(userData));
-    console.log('User Data', userData);
+    console.log("User Data", userData);
   };
 
   return (
     <Box
       sx={{
-        maxWidth: isSmallScreen ? '100%' : '600px', // Adjust width for smaller screens
-        margin: '0 auto',
+        maxWidth: isSmallScreen ? "100%" : "600px", // Adjust width for smaller screens
+        margin: "0 auto",
         padding: isSmallScreen ? 2 : 4,
         boxShadow: 3,
         borderRadius: 2,
-        backgroundColor: 'background.paper',
+        backgroundColor: "background.paper",
       }}
     >
       <Typography variant="h5" align="center" sx={{ mb: 3 }}>
@@ -97,29 +105,40 @@ const RegisterForm = () => {
               size="large"
               variant="contained"
               sx={{
-                padding: '.8rem 0',
-                bgcolor: '#9155FD',
-                color: 'white',
-                '&:hover': { bgcolor: '#7848c7' },
+                padding: ".8rem 0",
+                bgcolor: "#9155FD",
+                color: "white",
+                "&:hover": { bgcolor: "#7848c7" },
               }}
               type="submit"
               fullWidth
             >
-              Register
+              {isLoading ? (
+                <>
+                  <CircularProgress
+                    size={24}
+                    color="inherit"
+                    sx={{ marginRight: 2 }}
+                  />
+                  Registration...
+                </>
+              ) : (
+                "Register"
+              )}
             </Button>
           </Grid>
         </Grid>
       </form>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
           mt: 2,
         }}
       >
         <Typography variant="body2">Already have an account?</Typography>
-        <Button onClick={() => navigate('/login')} size="small" sx={{ mt: 1 }}>
+        <Button onClick={() => navigate("/login")} size="small" sx={{ mt: 1 }}>
           Login
         </Button>
       </Box>
