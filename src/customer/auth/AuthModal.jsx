@@ -1,24 +1,25 @@
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Modal, Typography, useMediaQuery } from "@mui/material";
 import React from "react";
 import RegisterForm from "./RegisterForm";
 import { useLocation } from "react-router-dom";
 import LoginForm from "./LoginForm";
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 500,
-    bgcolor: 'background.paper',
-    outline:"none",
+const AuthModal = ({ handleClose, open }) => {
+  const location = useLocation();
+  const isSmallScreen = useMediaQuery("(max-width:600px)"); // Use raw query as fallback
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: isSmallScreen ? "90%" : 500, // Full width for small screens
+    bgcolor: "background.paper",
+    outline: "none",
     boxShadow: 24,
-    p: 4,
+    p: isSmallScreen ? 2 : 4, // Adjust padding for small screens
   };
 
-const AuthModal = ({handleClose,open}) => {
-    const location = useLocation();
-    
   return (
     <div>
       <Modal
@@ -28,7 +29,7 @@ const AuthModal = ({handleClose,open}) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        {location.pathname === "/login" ? <LoginForm /> : <RegisterForm />}
+          {location.pathname === "/login" ? <LoginForm /> : <RegisterForm />}
         </Box>
       </Modal>
     </div>
