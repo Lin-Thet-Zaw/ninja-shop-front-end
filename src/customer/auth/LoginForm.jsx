@@ -1,14 +1,16 @@
 import { Button, Grid, TextField, useMediaQuery, Box, Typography } from '@mui/material';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../State/Auth/Action';
+import { CircularProgress } from '@mui/material';
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isSmallScreen = useMediaQuery('(max-width:600px)'); // Detect small screens
-
+  const isLoading = useSelector(state => state.auth.isLoading);
+  
   const handelSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -68,8 +70,16 @@ const LoginForm = () => {
               }}
               type="submit"
               fullWidth
+              disabled={isLoading}  // Disable the button while loading
             >
-              Login
+              {isLoading ? (
+                <>
+                  <CircularProgress size={24} color="inherit" sx={{ marginRight: 2 }} />
+                  Login...
+                </>
+              ) : (
+                'Login'
+              )}
             </Button>
           </Grid>
         </Grid>
