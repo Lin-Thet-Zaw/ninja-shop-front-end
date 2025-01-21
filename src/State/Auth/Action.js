@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from 'react-toastify';
 import { API_BASE_URL } from "../../config/apiConfig";
 import {
   GET_USER_FALIER,
@@ -28,10 +29,12 @@ export const register = (userData) => async (dispatch) => {
     if (user.jwt) {
       localStorage.setItem("jwt", user.jwt);
     }
-    console.log("user", user);
+    // console.log("user", user);
     dispatch(reqisterSuccess(user.jwt));
+    toast.success("Register success!")
   } catch (error) {
     dispatch(registerFailer(error.message));
+    toast.error("Registration failed: ", error.message)
   }
 };
 
@@ -48,10 +51,12 @@ export const login = (userData) => async (dispatch) => {
     if (user.jwt) {
       localStorage.setItem("jwt", user.jwt);
     }
-    console.log("user", user);
+    // console.log("user", user);
     dispatch(loginSuccess(user));
+    toast.success("Login Successfull!")
   } catch (error) {
     dispatch(loginFailer(error.message));
+    toast.error("Login Failed: ", error.message)
   }
 };
 

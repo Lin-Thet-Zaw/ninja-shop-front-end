@@ -82,7 +82,9 @@ export default function Checkout() {
               {activeStep === 0 && <p>Login</p>}
               {activeStep === 1 && <DelivaryAddress />}
               {activeStep === 2 && <OrderSummary />}
-              {activeStep === 3 && <p>Payment</p>}
+              {activeStep === 3 && <>{order.order?.orderItems.map((item) => {
+                
+              })}</>}
             </div>
           </React.Fragment>
         )}
