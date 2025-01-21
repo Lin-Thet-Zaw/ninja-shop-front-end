@@ -194,7 +194,44 @@ export default function Navigation() {
             </div>
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-              <div className="flow-root">
+            {auth.user?.firstName ? (
+                    <div>
+                      <Avatar
+                        className="text-white"
+                        onClick={handelUserClick}
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        sx={{
+                          bgcolor: deepPurple[500],
+                          color: "white",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {auth.user?.firstName[0].toUpperCase()}
+                      </Avatar>
+                      <Menu
+                        anchorEl={ancherEl}
+                        open={openUserMenu}
+                        onClose={handelCloseUserMenu}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem onClick={handelCloseUserMenu}>Profile</MenuItem>
+                        <MenuItem onClick={() => navigate("/account/order")}>Order</MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                      </Menu>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={handleOpen}
+                      className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                    >
+                      Sign in
+                    </Button>
+                  )}
+              {/* <div className="flow-root">
                 <a
                   href="#"
                   className="-m-2 block p-2 font-medium text-gray-900"
@@ -209,9 +246,9 @@ export default function Navigation() {
                 >
                   Create account
                 </a>
-              </div>
+              </div> */}
             </div>
-
+{/* 
             <div className="border-t border-gray-200 px-4 py-6">
               <a href="#" className="-m-2 flex items-center p-2">
                 <img
@@ -224,7 +261,7 @@ export default function Navigation() {
                 </span>
                 <span className="sr-only">, change currency</span>
               </a>
-            </div>
+            </div> */}
           </DialogPanel>
         </div>
       </Dialog>
