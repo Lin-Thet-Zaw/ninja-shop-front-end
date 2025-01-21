@@ -33,8 +33,20 @@ export const register = (userData) => async (dispatch) => {
     dispatch(reqisterSuccess(user.jwt));
     toast.success("Register success!")
   } catch (error) {
-    dispatch(registerFailer(error.message));
-    toast.error("Registration failed: ", error.message)
+    let errorMessage = "An unknown error occurred.";
+    if (error.response) {
+      // Server responded with a status code outside the 2xx range
+      errorMessage = error.response.data.message || "Server Error";
+    } else if (error.request) {
+      // Request was made, but no response was received
+      errorMessage = "Network Error: Please check your internet connection.";
+    } else {
+      // Something went wrong in setting up the request
+      errorMessage = error.message;
+    }
+
+    dispatch(registerFailer(errorMessage));
+    toast.error(`Registration failed: ${errorMessage}`)
   }
 };
 
