@@ -39,7 +39,7 @@ export const register = (userData) => async (dispatch) => {
       errorMessage = error.response.data.message || "Server Error";
     } else if (error.request) {
       // Request was made, but no response was received
-      errorMessage = "Network Error: Please check your internet connection.";
+      errorMessage = "Network Error";
     } else {
       // Something went wrong in setting up the request
       errorMessage = error.message;
@@ -75,7 +75,7 @@ export const login = (userData) => async (dispatch) => {
       errorMessage = error.response.data.message || "Server Error";
     } else if (error.request) {
       // Request was made, but no response was received
-      errorMessage = "Network Error: Please check your internet connection.";
+      errorMessage = "Network Error";
     } else {
       // Something went wrong in setting up the request
       errorMessage = error.message;
