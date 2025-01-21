@@ -56,6 +56,7 @@ export const login = (userData) => async (dispatch) => {
     toast.success("Login Successfull!")
   } catch (error) {
     dispatch(loginFailer(error.message));
+    console.log(error)
     toast.error("Login Failed: ", error.message)
   }
 };
