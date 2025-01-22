@@ -32,15 +32,13 @@ export default function Navigation() {
   const [openAuthModal, setOpenModal] = useState(false);
   const [ancherEl, setAncherEl] = useState(null);
   const openUserMenu = Boolean(ancherEl);
-  const {products} = useSelector(store=>store)
-  console.log(products)
+  const { products } = useSelector(store => store);
   const navigate = useNavigate();
   const location = useLocation();
-
   const dispatch = useDispatch();
   const jwt = localStorage.getItem("jwt");
   const { auth, order } = useSelector((store) => store);
-  console.log("Navber orders ", order)
+
   const handelUserClick = (event) => {
     setAncherEl(event.currentTarget);
   };
@@ -58,7 +56,7 @@ export default function Navigation() {
   };
 
   const handelCategorClick = (category, section, item) => {
-    navigate(`/${category.id}/${section.id}/${item.id}`);
+    navigate(item.href);
   };
 
   useEffect(() => {
@@ -76,10 +74,11 @@ export default function Navigation() {
     }
   }, [auth.user]);
 
-  const handleLogout=()=>{
-    dispatch(logout())
+  const handleLogout = () => {
+    dispatch(logout());
     handelCloseUserMenu();
-  }
+  };
+
   return (
     <div className="bg-white">
       {/* Mobile menu */}
