@@ -41,4 +41,16 @@ export const findProductById = (reqData) => async (dispatch) => {
       dispatch({type:FIND_PRODUCT_BY_ID_FAILUER,payload:error.message})
     }
   };
+
+  export const getAllProducts = () => async (dispatch) => {
+    dispatch({ type: FIND_PRODUCTS_REQUEST });
+    try {
+      const { data } = await api.get(`/api/products/all`);
+      console.log("getAll products" ,data)
+      dispatch({ type: FIND_PRODUCTS_SUCCESS, payload: data });
+    } catch (error) {
+      console.error("Error fetching all products:", error);
+      dispatch({ type: FIND_PRODUCTS_FAILUER, payload: error.message });
+    }
+  };
   

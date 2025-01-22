@@ -4,10 +4,12 @@ import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Button } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 
 const HomeSectionCarousel = ({ sectionName }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-
+  const dispatch = useDispatch();
+  const {products, loading, error } = useSelector((state)=>state.products)
   const responsive = {
     0: { items: 1 },
     720: { items: 2 },
