@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AliceCarousel from "react-alice-carousel";
 import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchProductsByCategory } from "../../../State/Product/Action";
 
 const HomeSectionCarousel = ({ sectionName }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useDispatch();
-  const {products, loading, error } = useSelector((state)=>state.products)
+  const { products, loading, error } = useSelector((state) => state.products);
+
+  useEffect(() => {
+    dispatch(fetchProductsByCategory(sectionName))
+  }, [dispatch, sectionName]);
+
   const responsive = {
     0: { items: 1 },
     720: { items: 2 },
@@ -22,17 +28,17 @@ const HomeSectionCarousel = ({ sectionName }) => {
   };
 
   const slideNext = () => {
-    if (activeIndex < items.length - responsive[1024].items) {
+    if (activeIndex < products.length - responsive[1024].items) {
       setActiveIndex(activeIndex + 1);
     }
   };
 
-  const items = new Array(15).fill(0).map((_, idx) => (
+  const items = products.map((product) => (
     <div
-      key={idx}
+      key={product.id}
       className="flex justify-center mx-2" // Ensures proper spacing and centering of items
     >
-      <HomeSectionCard />
+      <HomeSectionCard product={product} />
     </div>
   ));
 
@@ -42,14 +48,20 @@ const HomeSectionCarousel = ({ sectionName }) => {
         {sectionName}
       </h2>
       <div className="relative p-6">
-        <AliceCarousel
-          items={items}
-          disableButtonsControls
-          responsive={responsive}
-          disableDotsControls
-          activeIndex={activeIndex}
-          animationDuration={600} // Smooth transition
-        />
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : (
+          <AliceCarousel
+            items={items}
+            disableButtonsControls
+            responsive={responsive}
+            disableDotsControls
+            activeIndex={activeIndex}
+            animationDuration={600} // Smooth transition
+          />
+        )}
         {/* Left Arrow */}
         {activeIndex > 0 && (
           <Button
@@ -58,7 +70,7 @@ const HomeSectionCarousel = ({ sectionName }) => {
             sx={{
               position: "absolute",
               top: "50%",
-              left: "1rem", // Adds spacing to prevent overlap
+              left: "1rem",
               transform: "translateY(-50%)",
               bgcolor: "white",
               color: "blue",
@@ -66,7 +78,7 @@ const HomeSectionCarousel = ({ sectionName }) => {
               minWidth: "40px",
               minHeight: "40px",
               borderRadius: "50%",
-              boxShadow: "0px 4px 8px rgba(0,0,0,0.2)", // Adds subtle shadow for better visibility
+              boxShadow: "0px 4px 8px rgba(0,0,0,0.2)",
             }}
             aria-label="Previous"
           >
@@ -74,7 +86,7 @@ const HomeSectionCarousel = ({ sectionName }) => {
           </Button>
         )}
         {/* Right Arrow */}
-        {activeIndex < items.length - responsive[1024].items && (
+        {activeIndex < products.length - responsive[1024].items && (
           <Button
             onClick={slideNext}
             variant="contained"
