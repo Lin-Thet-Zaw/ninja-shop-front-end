@@ -1,21 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import AliceCarousel from "react-alice-carousel";
 import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsByCategory } from "../../../State/Product/Action";
 
-const HomeSectionCarousel = ({ sectionName }) => {
+const HomeSectionCarousel = ({ sectionName, products }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const dispatch = useDispatch();
-  const { products, loading, error } = useSelector((state) => state.products);
-
-  useEffect(() => {
-    dispatch(fetchProductsByCategory(sectionName))
-  }, [dispatch, sectionName]);
-
+  
   const responsive = {
     0: { items: 1 },
     720: { items: 2 },
@@ -33,35 +26,25 @@ const HomeSectionCarousel = ({ sectionName }) => {
     }
   };
 
+  // Map over the category products and create items for the carousel
   const items = products.map((product) => (
-    <div
-      key={product.id}
-      className="flex justify-center mx-2" // Ensures proper spacing and centering of items
-    >
+    <div key={product.id} className="flex justify-center mx-2">
       <HomeSectionCard product={product} />
     </div>
   ));
 
   return (
     <div className="border">
-      <h2 className="text-2xl font-extrabold text-gray-800 py-5 px-7">
-        {sectionName}
-      </h2>
+      <h2 className="text-2xl font-extrabold text-gray-800 py-5 px-7">{sectionName}</h2>
       <div className="relative p-6">
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>Error: {error}</p>
-        ) : (
-          <AliceCarousel
-            items={items}
-            disableButtonsControls
-            responsive={responsive}
-            disableDotsControls
-            activeIndex={activeIndex}
-            animationDuration={600} // Smooth transition
-          />
-        )}
+        <AliceCarousel
+          items={items}
+          disableButtonsControls
+          responsive={responsive}
+          disableDotsControls
+          activeIndex={activeIndex}
+          animationDuration={600} // Smooth transition
+        />
         {/* Left Arrow */}
         {activeIndex > 0 && (
           <Button

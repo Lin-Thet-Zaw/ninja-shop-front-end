@@ -2,6 +2,7 @@ import { FIND_PRODUCT_BY_ID_FAILUER, FIND_PRODUCT_BY_ID_REQUEST, FIND_PRODUCT_BY
 
 const initialState = {
     products:[],
+    fetchByCategories: {},
     product:null,
     loading:false,
     error:null
@@ -13,9 +14,12 @@ export const customerProductReducer = (state=initialState, action) => {
         case FIND_PRODUCT_BY_ID_REQUEST:
         case FIND_PRODUCTS_BY_CATEGORY_REQUEST:
             return {...state, loading:true, error:null}
+        
         case FIND_PRODUCTS_SUCCESS:
-        case FIND_PRODUCTS_BY_CATEGORY_SUCCESS:
             return {...state, loading:false, error:null, products:action.payload}
+        case FIND_PRODUCTS_BY_CATEGORY_SUCCESS:
+            case FIND_PRODUCTS_BY_CATEGORY_SUCCESS:
+                return {...state, loading: false, error: null, fetchByCategories: action.payload};
         case FIND_PRODUCT_BY_ID_SUCCESS:
             return {...state, loading:true, error:null, product:action.payload}
         case FIND_PRODUCTS_FAILUER:

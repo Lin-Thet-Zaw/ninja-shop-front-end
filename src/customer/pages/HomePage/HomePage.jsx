@@ -3,24 +3,29 @@ import { useDispatch, useSelector } from "react-redux";
 import MainCarousel from "../../componenets/HomeCarousel/MainCarousel";
 import HomeSectionCarousel from "../../componenets/HomeSectionCarousel/HomeSectionCarousel";
 import { Helmet } from "react-helmet";
-import { CircularProgress } from "@mui/material"; // Import CircularProgress from Material-UI
+import { CircularProgress } from "@mui/material";
 import { getAllProducts } from "../../../State/Product/Action";
-
 
 function HomePage() {
   const dispatch = useDispatch();
 
-  // Fetch products and categories from Redux store
   const { products, loading, error } = useSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(getAllProducts()); // Fetch all products on component mount
   }, [dispatch]);
 
-  // Extract unique categories from the products
-  const categories = products
-    ? [...new Set(products.map((product) => product.category))]
-    : [];
+  console.log("Home Categories", products);
+
+  // Group products by category
+  const groupedCategories = products.reduce((acc, product) => {
+    const categoryName = product.category.name;
+    if (!acc[categoryName]) {
+      acc[categoryName] = [];
+    }
+    acc[categoryName].push(product);
+    return acc;
+  }, {});
 
   return (
     <div>
@@ -36,10 +41,13 @@ function HomePage() {
           </div>
         )}
         {error && <p className="text-center text-red-500">Error: {error}</p>}
-        {!loading &&
-          !error &&
-          categories.map((category) => (
-            <HomeSectionCarousel key={category.id} sectionName={category.name} />
+        {!loading && !error &&
+          Object.keys(groupedCategories).map((categoryName) => (
+            <HomeSectionCarousel
+              key={categoryName}
+              sectionName={categoryName}
+              products={groupedCategories[categoryName]} // Pass the products for this category to the carousel
+            />
           ))}
       </div>
     </div>

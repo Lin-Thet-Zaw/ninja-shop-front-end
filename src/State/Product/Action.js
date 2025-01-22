@@ -63,12 +63,10 @@ export const getAllProducts = () => async (dispatch) => {
   }
 };
 
-// Function to dispatch product fetching
 export const fetchProductsByCategory = (category) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`/api/products?category=${category}`);
-      const data = await response.json();
+      const data = await api.get(`/api/products/category?category=${category}`);
       dispatch({ type: FIND_PRODUCTS_BY_CATEGORY_SUCCESS, payload: data });
     } catch (error) {
       dispatch({
