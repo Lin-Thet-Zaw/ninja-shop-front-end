@@ -17,17 +17,17 @@ function HomePage() {
 
   console.log("Home Categories", products);
 
-// Group products by category (Check if products is an array)
-const groupedCategories = Array.isArray(products)
-  ? products.reduce((acc, product) => {
-      const categoryName = product.category.name;
-      if (!acc[categoryName]) {
-        acc[categoryName] = [];
-      }
-      acc[categoryName].push(product);
-      return acc;
-    }, {})
-  : {}; 
+  // Group products by category (Check if products is an array)
+  const groupedCategories = Array.isArray(products)
+    ? products.reduce((acc, product) => {
+        const categoryName = product.category.name;
+        if (!acc[categoryName]) {
+          acc[categoryName] = [];
+        }
+        acc[categoryName].push(product);
+        return acc;
+      }, {})
+    : {}; 
 
   return (
     <div>
@@ -43,6 +43,9 @@ const groupedCategories = Array.isArray(products)
           </div>
         )}
         {error && <p className="text-center text-red-500">Error: {error}</p>}
+        {!loading && !error && Object.keys(groupedCategories).length === 0 && (
+          <p className="text-center">No products available</p>
+        )}
         {!loading && !error &&
           Object.keys(groupedCategories).map((categoryName) => (
             <HomeSectionCarousel
