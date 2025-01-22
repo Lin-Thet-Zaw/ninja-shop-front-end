@@ -4,12 +4,15 @@ import { thunk } from "redux-thunk";
 import { customerProductReducer } from "./Product/Reducer";
 import { cartReducer } from "./Cart/Reducer";
 import { orderReducer } from "./Order/Reducer";
+import { filtersReducer } from "./Filter/Reducer";
 
-const rootReducers=combineReducers({
-    auth:authReducer,
-    products:customerProductReducer,
-    cart:cartReducer,
-    order:orderReducer
-})
 
-export const store = legacy_createStore(rootReducers,applyMiddleware(thunk)) 
+const rootReducers = combineReducers({
+  auth: authReducer,
+  products: customerProductReducer,
+  cart: cartReducer,
+  order: orderReducer,
+  filters: filtersReducer, // Add filters reducer here
+});
+
+export const store = legacy_createStore(rootReducers, applyMiddleware(thunk));

@@ -35,6 +35,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { findProducts } from "../../../State/Product/Action";
+import { fetchFilters } from "../../../State/Filter/Action";
 
 const items = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
@@ -65,7 +66,9 @@ export default function Product() {
   const param = useParams();
   const dispatch = useDispatch();
   const {products} = useSelector(store=>store)
-  
+  const { filters, singleFilter, loading, error } = useSelector((state) => state.filters);
+
+  console.log("Filtes " ,filters,"singleFilters", singleFilter)
   const decodedQueryString = decodeURIComponent(location.search);
   const searchParms = new URLSearchParams(decodedQueryString);
   const colorValue = searchParms.get("color");
@@ -147,6 +150,10 @@ export default function Product() {
     pageNumber,
     stock,
   ]);
+
+  useEffect(() => {
+    dispatch(fetchFilters());
+  }, [dispatch]);
 
   const handelRadioFilterChange = (e, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
@@ -546,7 +553,7 @@ export default function Product() {
                               {section.options.map((option) => (
                                 <FormControlLabel
                                   key={option.id}
-                                  value={option.id}
+                                  value={option.value}
                                   control={<Radio />}
                                   label={option.label}
                                 />

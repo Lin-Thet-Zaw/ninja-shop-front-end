@@ -231,6 +231,7 @@ export default function ProductDetails() {
                 <Button
                   onClick={handelAddToCard}
                   variant="contained"
+                  disabled={!selectedSize}
                   sx={{ px: "2rem", py: "1rem", bgcolor: "#9155fd" }}
                 >
                   Add to cart
@@ -251,9 +252,9 @@ export default function ProductDetails() {
               </div> */}
 
               <div className="mt-10">
-                <h3 className="text-sm font-medium text-gray-900">
+                {/* <h3 className="text-sm font-medium text-gray-900">
                   Highlights
-                </h3>
+                </h3> */}
 
                 {/* <div className="mt-4">
                   <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
@@ -268,10 +269,10 @@ export default function ProductDetails() {
 
               <div className="mt-10">
                 <h2 className="text-sm font-medium text-gray-900">Details</h2>
-{/* 
+
                 <div className="mt-4 space-y-6">
-                  <p className="text-sm text-gray-600">{product.details}</p>
-                </div> */}
+                  <p className="text-sm text-gray-600">{products.product?.description}</p>
+                </div>
               </div>
             </div>
           </div>

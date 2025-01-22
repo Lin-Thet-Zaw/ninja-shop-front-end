@@ -106,93 +106,96 @@ export default function Navigation() {
               </button>
             </div>
 
-            {/* Links */}
-            <TabGroup className="mt-2">
-              <div className="border-b border-gray-200">
-                <TabList className="-mb-px flex space-x-8 px-4">
-                  {navigation.categories.map((category) => (
-                    <Tab
-                      key={category.name}
-                      className="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-900 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600"
-                    >
-                      {category.name}
-                    </Tab>
-                  ))}
-                </TabList>
-              </div>
-              <TabPanels as={Fragment}>
-                {navigation.categories.map((category) => (
-                  <TabPanel
-                    key={category.name}
-                    className="space-y-10 px-4 pb-8 pt-10"
-                  >
-                    <div className="grid grid-cols-2 gap-x-4">
-                      {category.featured.map((item) => (
-                        <div key={item.name} className="group relative text-sm">
-                          <img
-                            alt={item.imageAlt}
-                            src={item.imageSrc}
-                            className="aspect-square w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75"
-                          />
-                          <a
-                            href={item.href}
-                            className="mt-6 block font-medium text-gray-900"
-                          >
-                            <span
-                              aria-hidden="true"
-                              className="absolute inset-0 z-10"
-                            />
-                            {item.name}
-                          </a>
-                          <p aria-hidden="true" className="mt-1">
-                            Shop now
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                    {category.sections.map((section) => (
-                      <div key={section.name}>
-                        <p
-                          id={`${category.id}-${section.id}-heading-mobile`}
-                          className="font-medium text-gray-900"
-                        >
-                          {section.name}
-                        </p>
-                        <ul
-                          role="list"
-                          aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
-                          className="mt-6 flex flex-col space-y-6"
-                        >
-                          {section.items.map((item) => (
-                            <li key={item.name} className="flow-root">
-                              <a
-                                href={item.href}
-                                className="-m-2 block p-2 text-gray-500"
-                              >
-                                {item.name}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </TabPanel>
-                ))}
-              </TabPanels>
-            </TabGroup>
-
-            <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-              {navigation.pages.map((page) => (
-                <div key={page.name} className="flow-root">
-                  <a
-                    href={page.href}
-                    className="-m-2 block p-2 font-medium text-gray-900"
-                  >
-                    {page.name}
-                  </a>
-                </div>
-              ))}
+{/*
+  Links Component
+*/}
+<TabGroup className="mt-2">
+  <div className="border-b border-gray-200">
+    <TabList className="-mb-px flex space-x-8 px-4">
+      {navigation?.categories?.map((category) => (
+        <Tab
+          key={category.name}
+          className="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-900 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600"
+        >
+          {category.name}
+        </Tab>
+      ))}
+    </TabList>
+  </div>
+  <TabPanels as={Fragment}>
+    {navigation?.categories?.map((category) => (
+      <TabPanel
+        key={category.name}
+        className="space-y-10 px-4 pb-8 pt-10"
+      >
+        <div className="grid grid-cols-2 gap-x-4">
+          {category?.featured?.map((item) => (
+            <div key={item.name} className="group relative text-sm">
+              <img
+                alt={item.imageAlt}
+                src={item.imageSrc}
+                className="aspect-square w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75"
+              />
+              <a
+                href={item.href}
+                className="mt-6 block font-medium text-gray-900"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 z-10"
+                />
+                {item.name}
+              </a>
+              <p aria-hidden="true" className="mt-1">
+                Shop now
+              </p>
             </div>
+          ))}
+        </div>
+        {category?.sections?.map((section) => (
+          <div key={section.name}>
+            <p
+              id={`${category.id}-${section.id}-heading-mobile`}
+              className="font-medium text-gray-900"
+            >
+              {section.name}
+            </p>
+            <ul
+              role="list"
+              aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
+              className="mt-6 flex flex-col space-y-6"
+            >
+              {section?.items?.map((item) => (
+                <li key={item.name} className="flow-root">
+                  <a
+                    href={item.href}
+                    className="-m-2 block p-2 text-gray-500"
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </TabPanel>
+    ))}
+  </TabPanels>
+</TabGroup>
+
+<div className="space-y-6 border-t border-gray-200 px-4 py-6">
+  {navigation?.pages?.map((page) => (
+    <div key={page.name} className="flow-root">
+      <a
+        href={page.href}
+        className="-m-2 block p-2 font-medium text-gray-900"
+      >
+        {page.name}
+      </a>
+    </div>
+  ))}
+</div>
+
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
             {auth.user?.firstName ? (
@@ -303,7 +306,7 @@ export default function Navigation() {
               {/* Flyout menus */}
               <PopoverGroup className="hidden lg:ml-8 lg:block lg:self-stretch z-40">
                 <div className="flex h-full space-x-8">
-                  {navigation.categories.map((category) => (
+                  {navigation?.categories?.map((category) => (
                     <Popover key={category.name} className="flex">
                       <div className="relative flex">
                         <PopoverButton className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:border-indigo-600 data-[open]:text-indigo-600">
@@ -391,7 +394,7 @@ export default function Navigation() {
                     </Popover>
                   ))}
 
-                  {navigation.pages.map((page) => (
+                  {navigation?.pages?.map((page) => (
                     <a
                       key={page.name}
                       href={page.href}

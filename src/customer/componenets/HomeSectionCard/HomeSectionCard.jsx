@@ -1,10 +1,19 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 const HomeSectionCard = ({ product }) => {
-  console.log(product); // For debugging to see product details in the console
+  const navigate = useNavigate(); // Initialize navigate function
+
+  const handleCardClick = () => {
+    // Navigate to the product details page with the product ID
+    navigate(`/product/${product.id}`);
+  };
 
   return (
-    <div className="cursor-pointer flex flex-col items-center bg-white rounded-lg shadow-lg overflow-hidden w-full sm:w-[14rem] md:w-[15rem] mx-3 border">
+    <div
+      className="cursor-pointer flex flex-col items-center bg-white rounded-lg shadow-lg overflow-hidden w-full sm:w-[14rem] md:w-[15rem] mx-3 border"
+      onClick={handleCardClick} // Attach click event for navigation
+    >
       {/* Image Section */}
       <div className="h-[12rem] w-full">
         <img

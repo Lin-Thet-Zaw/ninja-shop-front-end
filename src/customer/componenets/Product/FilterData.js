@@ -26,12 +26,10 @@ export const filters = [
     id: "size",
     name: "Size",
     options: [
-      { value: "2l", label: "2L", checked: false },
-      { value: "6l", label: "6L", checked: false },
-      { value: "12l", label: "12L", checked: false },
-      { value: "18l", label: "18L", checked: false },
-      { value: "20l", label: "20L", checked: false },
-      { value: "40l", label: "40L", checked: true },
+      { value: "S", label: "S", checked: true },
+      { value: "M", label: "M", checked: false },
+      { value: "L", label: "L", checked: false },
+      { value: "XXL", label: "XXL", checked: false },
     ],
   },
 ];
@@ -41,12 +39,12 @@ export const singleFilter = [
       id: "price",
       name: "Price",
       options: [
-          {value: "159-399", lebel:"$159 - $399"},
-          {value: "159-399", lebel:"$159 - $399"}
-      ]
+        { value: "159-399", label: "$159 - $399" },
+        { value: "400-599", label: "$400 - $599" }
+    ]
     },
     {
-      id:"discount",
+      id:"discounted",
       name:"Discount Range",
       options:[
           {value:"10", label:"10% above"},
