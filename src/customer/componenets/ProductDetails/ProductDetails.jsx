@@ -41,7 +41,7 @@ export default function ProductDetails() {
     dispatch(findProductById(data));
   }, [params.productId]);
 
-  return (
+return (
     <div>
       <Helmet>
         <title>Product Details - Ninja Shop</title>
@@ -205,60 +205,82 @@ export default function ProductDetails() {
 
         {/* Reviews and Ratings Section */}
         {/* <Box sx={{ mt: 6 }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-          Recent Reviews and Ratings
-        </Typography>
-        <Box sx={{ border: "1px solid #e0e0e0", borderRadius: 2, p: 3 }}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={7}>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                {[1, 1, 1, 1].map((_, index) => (
-                  <ProductReviewCard key={index} />
-                ))}
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={5}>
-              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-                Product Ratings
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
-                <Rating value={4.5} precision={0.5} readOnly />
-                <Typography variant="body2" sx={{ opacity: 0.6 }}>
-                  5345 Ratings
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+            Recent Reviews and Ratings
+          </Typography>
+          <Box
+            sx={{
+              border: "1px solid #e0e0e0",
+              borderRadius: 2,
+              p: 3,
+              maxHeight: "400px",
+              overflowY: "auto",
+            }}
+          >
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={7}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                  {[1, 1, 1, 1].map((_, index) => (
+                    <ProductReviewCard key={index} />
+                  ))}
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={5}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                  Product Ratings
                 </Typography>
-              </Box>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {["Excellent", "Good", "Average", "Poor"].map((label, index) => (
-                  <Box key={index} sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <Typography variant="body2" sx={{ width: 80 }}>
-                      {label}
-                    </Typography>
-                    <LinearProgress
-                      variant="determinate"
-                      value={40}
-                      sx={{ flex: 1, height: 8, borderRadius: 4 }}
-                    />
-                  </Box>
-                ))}
-              </Box>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}
+                >
+                  <Rating value={4.5} precision={0.5} readOnly />
+                  <Typography variant="body2" sx={{ opacity: 0.6 }}>
+                    5345 Ratings
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  {["Excellent", "Good", "Average", "Poor"].map(
+                    (label, index) => (
+                      <Box
+                        key={index}
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
+                        <Typography variant="body2" sx={{ width: 80 }}>
+                          {label}
+                        </Typography>
+                        <LinearProgress
+                          variant="determinate"
+                          value={40}
+                          sx={{ flex: 1, height: 8, borderRadius: 4 }}
+                        />
+                      </Box>
+                    )
+                  )}
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
-      </Box> */}
+          </Box>
+        </Box> */}
 
         {/* Similar Products Section */}
         {/* <Box sx={{ mt: 6 }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-          Similar Products
-        </Typography>
-        <Grid container spacing={3}>
-          {[1, 1, 1, 1].map((_, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-              <HomeSectionCard />
-            </Grid>
-          ))}
-        </Grid>
-      </Box> */}
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+            Similar Products
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 3,
+              overflowX: "auto",
+              pb: 2,
+            }}
+          >
+            {[1, 1, 1, 1].map((_, index) => (
+              <Box key={index} sx={{ minWidth: "250px" }}>
+                <HomeSectionCard />
+              </Box>
+            ))}
+          </Box>
+        </Box> */}
       </Box>
     </div>
   );

@@ -91,7 +91,7 @@ const OrdersTable = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {adminOrder?.orders?.map((item) => (
+              {adminOrder.orders?.map((item) => (
                 <TableRow
                   key={item.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

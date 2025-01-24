@@ -51,7 +51,7 @@ export const findProductById = (reqData) => async (dispatch) => {
   const { productId } = reqData;
   try {
     const { data } = await api.get(`/api/products/id/${productId}`);
-    console.log(data);
+    console.log("Find product by id", data);
     dispatch({ type: FIND_PRODUCT_BY_ID_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: FIND_PRODUCT_BY_ID_FAILUER, payload: error.message });
@@ -90,7 +90,9 @@ export const createProduct = (product) => async(dispatch)=>{
   
   dispatch({type: CREATE_PRODUCT_REQUEST});
   try{
+    console.log(`Create product red,${product.data}`)
     const {data} = await api.post(`/api/admin/products/`, product.data)
+    console.log("Create product data", data)
     dispatch({type: CREATE_PRODUCT_SUCCESS, payload:data})
     toast.success("Product Created Successfully")
 

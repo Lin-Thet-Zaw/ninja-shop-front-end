@@ -117,7 +117,7 @@ const CreateProductForm = () => {
     formData.append("secondLevelCategory", productData.secondLevelCategory);
     formData.append("thirdLevelCategory", productData.thirdLevelCategory);
     formData.append("description", productData.description);
-    formData.append("size", JSON.stringify(productData.size));
+    formData.append("sizes", JSON.stringify(productData.size));
 
     dispatch(createProduct({ data: formData, jwt }));
   };
@@ -285,6 +285,7 @@ const CreateProductForm = () => {
                     onChange={(event) => handleSizeChange(event, index)}
                     required
                     fullWidth
+                    
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>

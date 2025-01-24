@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import AddressCard from "../AddressCard/AddressCard";
-import CartItems from "../Cart/CartItems";
 import { Button, Box, Typography, Grid, Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { comfirmedOrder, getOrderById } from "../../../State/Order/Action";
+import OrderCartItem from "../Order/OrderCartItem";
 
 const OrderSummary = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,15 @@ const OrderSummary = () => {
   return (
     <Box sx={{ padding: { xs: 2, sm: 3, md: 4 } }}>
       {/* Address Card */}
-      <Box sx={{ mb: 4, p: 3, boxShadow: 3, borderRadius: 2, border: "1px solid #e0e0e0" }}>
+      <Box
+        sx={{
+          mb: 4,
+          p: 3,
+          boxShadow: 3,
+          borderRadius: 2,
+          border: "1px solid #e0e0e0",
+        }}
+      >
         <AddressCard address={address} />
       </Box>
 
@@ -38,7 +46,7 @@ const OrderSummary = () => {
         <Grid item xs={12} md={8}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             {order.order?.orderItemList.map((item, index) => (
-              <CartItems key={index} item={item} />
+              <OrderCartItem key={index} item={item} />
             ))}
           </Box>
         </Grid>
@@ -53,6 +61,9 @@ const OrderSummary = () => {
               border: "1px solid #e0e0e0",
               borderRadius: 2,
               backgroundColor: "#ffffff",
+              maxHeight: { md: "calc(100vh - 150px)" }, // Adjust height as needed
+              overflowY: "auto", // Enable vertical scrolling
+              mb: 4, // Add margin to avoid footer overlap
             }}
           >
             <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
@@ -103,7 +114,7 @@ const OrderSummary = () => {
                 "&:hover": { bgcolor: "#7e4ad6" },
               }}
             >
-                Your order is being reviewed
+              Your order is being reviewed
             </Button>
           </Box>
         </Grid>

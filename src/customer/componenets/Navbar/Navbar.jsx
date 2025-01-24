@@ -481,7 +481,7 @@ export default function Navigation() {
                 {/* Cart */}
                 {auth.user && (
                   <div className="ml-4 flow-root lg:ml-6">
-                    <a href="#" className="group -m-2 flex items-center p-2">
+                    <a href="/account/order" className="group -m-2 flex items-center p-2">
                       <ShoppingBagIcon
                         aria-hidden="true"
                         className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
