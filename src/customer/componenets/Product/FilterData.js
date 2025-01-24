@@ -11,6 +11,8 @@ export const filters = [
       { value: "purple", label: "Purple", checked: false },
     ],
   },
+
+  
   {
     id: "category",
     name: "Category",
