@@ -9,6 +9,7 @@ import ProductDetails from '../customer/componenets/ProductDetails/ProductDetail
 import Checkout from '../customer/componenets/Checkout/Checkout';
 import OrderDetails from '../customer/componenets/Order/OrderDetails';
 import Cart from '../customer/componenets/Cart/Cart';
+import OrderTracker from '../customer/componenets/Order/OrderTracker';
 
 const CustomerRouters = () => {
   return (
@@ -26,6 +27,7 @@ const CustomerRouters = () => {
         <Route path='/product/:productId' element={<ProductDetails />} />
         <Route path='/checkout' element={<Checkout />} />
         <Route path='/account/order' element={<Order />} />
+        <Route path='/menu/tracking-orders' element={<OrderTracker/>}/>
         <Route path='/account/order/:orderId' element={<OrderDetails />} />
       </Routes>
       <div>

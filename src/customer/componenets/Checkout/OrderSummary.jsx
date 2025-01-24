@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import AddressCard from "../AddressCard/AddressCard";
 import CartItems from "../Cart/CartItems";
-import { Button } from "@mui/material";
+import { Button, Box, Typography, Grid, Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { comfirmedOrder, getOrderById } from "../../../State/Order/Action";
@@ -9,67 +9,106 @@ import { comfirmedOrder, getOrderById } from "../../../State/Order/Action";
 const OrderSummary = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {order} = useSelector(store=>store)
-  const address = order.order?.shippingAddress || {}
-  const location  = useLocation();
+  const { order } = useSelector((store) => store);
+  const address = order.order?.shippingAddress || {};
+  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const orderId = searchParams.get("order_id");
   console.log("Order ID:", orderId);
 
   useEffect(() => {
-    dispatch(getOrderById(orderId))
-  },[orderId])
+    dispatch(getOrderById(orderId));
+  }, [orderId]);
 
-    const comfirmedOrderHandler = () => {
-      const orderData = { orderId, navigate };
-      dispatch(comfirmedOrder(orderData));
-    }
+  const comfirmedOrderHandler = () => {
+    const orderData = { orderId, navigate };
+    dispatch(comfirmedOrder(orderData));
+  };
+
   return (
-    <div>
-      <div className="p-5 shadow-lg rounded-s-md border">
-        <AddressCard address={address}/>
-      </div>
-      <div>
-        <div className="lg:grid grid-cols-3 relative">
-          <div className="col-span-2">
-            {order.order?.orderItemList.map((item) => (
-              <CartItems item={item}/>
+    <Box sx={{ padding: { xs: 2, sm: 3, md: 4 } }}>
+      {/* Address Card */}
+      <Box sx={{ mb: 4, p: 3, boxShadow: 3, borderRadius: 2, border: "1px solid #e0e0e0" }}>
+        <AddressCard address={address} />
+      </Box>
+
+      {/* Order Items and Price Details */}
+      <Grid container spacing={4}>
+        {/* Order Items */}
+        <Grid item xs={12} md={8}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            {order.order?.orderItemList.map((item, index) => (
+              <CartItems key={index} item={item} />
             ))}
-          </div>
-          <div className="px-5 sticky top-0 h-[100vh] mt-5 lg:mt-0">
-            <div className="border">
-              <p className="uppercase font-bold opacity-60">Price Details</p>
-              <hr />
-              <div className="space-y-3 font-semibold mb-10">
-                <div className="flex justify-between pt-3 text-black">
-                  <span>Price</span>
-                  <span>${order.order?.totalPrice}</span>
-                </div>
-                <div className="flex justify-between pt-3">
-                  <span>Discount</span>
-                  <span className="text-green-600">-${order.order?.discounted}</span>
-                </div>
-                <div className="flex justify-between pt-3">
-                  <span>Delivery Charge </span>
-                  <span className="text-green-600">Free</span>
-                </div>
-                <div className="flex justify-between pt-3">
-                  <span>Total Amount</span>
-                  <span className="text-green-600">${order.order?.totalDiscountPrice}</span>
-                </div>
-              </div>
-              <Button onClick={comfirmedOrderHandler}
-                variant="contained"
-                className="w-full mt-5"
-                sx={{ px: "2.5rem", py: "0.7rem", bgcolor: "#9155fd" }}
+          </Box>
+        </Grid>
+
+        {/* Price Details */}
+        <Grid item xs={12} md={4}>
+          <Box
+            sx={{
+              position: { md: "sticky" },
+              top: 16,
+              p: 3,
+              border: "1px solid #e0e0e0",
+              borderRadius: 2,
+              backgroundColor: "#ffffff",
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+              PRICE DETAILS
+            </Typography>
+            <Divider sx={{ mb: 2 }} />
+
+            {/* Price Breakdown */}
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography>Price</Typography>
+                <Typography>${order.order?.totalPrice}</Typography>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography>Discount</Typography>
+                <Typography sx={{ color: "green" }}>
+                  -${order.order?.discounted}
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography>Delivery Charge</Typography>
+                <Typography sx={{ color: "green" }}>FREE</Typography>
+              </Box>
+              <Divider sx={{ my: 1 }} />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontWeight: "bold",
+                }}
               >
-                Comfirm Orders
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                <Typography>Total Amount</Typography>
+                <Typography sx={{ color: "green" }}>
+                  ${order.order?.totalDiscountPrice}
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Confirm Order Button */}
+            <Button
+              // onClick={comfirmedOrderHandler}
+              variant="contained"
+              fullWidth
+              sx={{
+                mt: 3,
+                py: 1.5,
+                bgcolor: "#9155fd",
+                "&:hover": { bgcolor: "#7e4ad6" },
+              }}
+            >
+                Your order is being reviewed
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

@@ -1,49 +1,122 @@
-import { Grid } from "@mui/material";
-import React from "react";
+import { Grid, Box, Typography, Checkbox } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import OrderCard from "./OrderCard";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrders } from "../../../State/Order/Action";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const orderStatus = [
-  { label: "On The Way", value: "on_the_awy" },
-  { label: "Deliver", value: "deliver" },
-  { label: "Cancelled", value: "cancelled" },
-  { label: "Return", value: "return" },
+  { label: "On The Way", value: "SHIPPED" },
+  { label: "Delivered", value: "DELIVERED" },
+  { label: "Confirm", value: "CONFIRMED" },
+  { label: "Cancelled", value: "CANCELLED" },
+  { label: "PENDING", value: "PENDING" },
 ];
+
 const Order = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { auth, orders } = useSelector((store) => store.order);
+  const jwt = localStorage.getItem("jwt");
+  const [selectedStatus, setSelectedStatus] = useState([]);
+
+  if (auth?.user === null || jwt === null) {
+    toast.info("Plase login");
+    navigate("/");
+  }
+
+  useEffect(() => {
+    dispatch(getOrders());
+  }, [dispatch]);
+
+  const handleStatusChange = (value) => {
+    if (selectedStatus.includes(value)) {
+      setSelectedStatus(selectedStatus.filter((status) => status !== value));
+    } else {
+      setSelectedStatus([...selectedStatus, value]);
+    }
+  };
+
+  const filteredOrders = orders?.filter((order) =>
+    selectedStatus.length === 0
+      ? true
+      : selectedStatus.includes(order.orderStatus)
+  );
+
+  console.log("Filter orders", filteredOrders);
+
   return (
-    <div className="px-5 lg:px-20">
-      <Grid container sx={{ justifyContent: "space-between" }}>
-        <Grid item sx={2.5}>
-          <div className="h-auto shadow-lg bg-white p-5 sticky top-5">
-            <h1 className="font-bold text-lg">Filter</h1>
-            <div className="space-y-4 mt-10">
-              <h1 className="font-semibold">Order Status</h1>
-              {orderStatus.map((option) => (
-                <div className="flex items-center">
-                  <input
-                    defaultValue={option.value}
-                    type="checkbox"
-                    className="h-4 w-4 border-gray-300
-                text-indigo-300 focus:ring-indigo-500"
-                  />
-                  <label
-                    className="ml-3 text-sm text-gray-600"
-                    htmlFor={option.value}
+    <div>
+      <Helmet>
+        <title>Order Filter - Ninja Shop</title>
+        <meta
+          name="description"
+          content="Welcome to the homepage of our app."
+        />
+      </Helmet>
+      <Box sx={{ padding: { xs: 2, sm: 3, md: 4 } }}>
+        <Grid container spacing={4}>
+          {/* Filter Section */}
+          <Grid item xs={12} md={3}>
+            <Box
+              sx={{
+                p: 3,
+                bgcolor: "white",
+                borderRadius: 2,
+                boxShadow: 3,
+                position: { md: "sticky" },
+                top: 16,
+              }}
+            >
+              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                Filter
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: "bold", mb: 2 }}
+              >
+                Order Status
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                {orderStatus.map((option) => (
+                  <Box
+                    key={option.value}
+                    sx={{ display: "flex", alignItems: "center" }}
                   >
-                    {option.label}
-                  </label>
-                </div>
+                    <Checkbox
+                      checked={selectedStatus.includes(option.value)}
+                      onChange={() => handleStatusChange(option.value)}
+                      sx={{ padding: 0, mr: 1 }}
+                    />
+                    <Typography variant="body2">{option.label}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Grid>
+
+          {/* Order Cards Section */}
+          <Grid item xs={12} md={9}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 3,
+                maxHeight: "80vh", // Fixed height for scrollable container
+                overflowY: "auto", // Enable vertical scrolling
+                paddingRight: 2, // Add padding to avoid scrollbar overlap
+              }}
+            >
+              {filteredOrders?.map((order) => (
+                <OrderCard key={order.id} order={order} />
               ))}
-            </div>
-          </div>
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={9}>
-          <div className="space-y-5">
-            {[1, 1, 1, 1, 1].map((orderCard) => (
-              <OrderCard />
-            ))}
-          </div>
-        </Grid>
-      </Grid>
+      </Box>
     </div>
   );
 };

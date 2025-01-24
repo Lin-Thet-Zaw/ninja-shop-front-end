@@ -36,6 +36,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { findProducts } from "../../../State/Product/Action";
 import { fetchFilters } from "../../../State/Filter/Action";
+import { Helmet } from "react-helmet";
 
 const items = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
@@ -65,10 +66,12 @@ export default function Product() {
   const navigate = useNavigate();
   const param = useParams();
   const dispatch = useDispatch();
-  const {products} = useSelector(store=>store)
-  const { filters, singleFilter, loading, error } = useSelector((state) => state.filters);
+  const { products } = useSelector((store) => store);
+  const { filters, singleFilter, loading, error } = useSelector(
+    (state) => state.filters
+  );
 
-  console.log("Filtes " ,filters,"singleFilters", singleFilter)
+  console.log("Filtes ", filters, "singleFilters", singleFilter);
   const decodedQueryString = decodeURIComponent(location.search);
   const searchParms = new URLSearchParams(decodedQueryString);
   const colorValue = searchParms.get("color");
@@ -113,17 +116,17 @@ export default function Product() {
     navigate({ search: `?${query}` });
   };
 
-  const handlePaginationChange  =(event,value) => {
+  const handlePaginationChange = (event, value) => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("page", value);
     const query = searchParams.toString();
-    navigate({search:`?${query}`})
-  }
+    navigate({ search: `?${query}` });
+  };
   useEffect(() => {
     const [minPrice, maxPrice] = priceValue
       ? priceValue.split("-").map(Number)
       : [100, 100000];
-  
+
     const data = {
       category: param.lavelThree || "",
       color: colorValue || [],
@@ -136,9 +139,9 @@ export default function Product() {
       pageSize: 1,
       stock: stock || "",
     };
-  
+
     console.log("Filter Data:", data);
-  
+
     dispatch(findProducts(data));
   }, [
     param.lavelThree,
@@ -180,6 +183,13 @@ export default function Product() {
 
   return (
     <div className="bg-white">
+      <Helmet>
+        <title>Product Filter - Ninja Shop</title>
+        <meta
+          name="description"
+          content="Welcome to the homepage of our app."
+        />
+      </Helmet>
       <div>
         {/* Mobile filter dialog */}
         <Dialog
@@ -570,19 +580,23 @@ export default function Product() {
               {/* Product grid */}
               <div className="lg:col-span-4 w-full">
                 <div className="flex flex-wrap justify-center bg-white py-5">
-                  {products.products && products.products?.content?.map((item, index) => (
-                    <ProductCard key={index} product={item} />
-                  ))}
+                  {products.products &&
+                    products.products?.content?.map((item, index) => (
+                      <ProductCard key={index} product={item} />
+                    ))}
                 </div>
               </div>
             </div>
           </section>
           <section>
             <div className="w-full px=[3.6rem]">
-                <div className="px-4 py-5 flex justify-center">
-                  <Pagination count={products.products?.totalPages} color="secondery" 
-                  onChange={handlePaginationChange}></Pagination>
-                </div>
+              <div className="px-4 py-5 flex justify-center">
+                <Pagination
+                  count={products.products?.totalPages}
+                  color="secondery"
+                  onChange={handlePaginationChange}
+                ></Pagination>
+              </div>
             </div>
           </section>
         </main>

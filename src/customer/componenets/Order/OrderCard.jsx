@@ -1,50 +1,86 @@
-import { Grid } from "@mui/material";
-import React from "react";
+import { Grid, Box, Typography, AvatarGroup, Avatar } from "@mui/material";
 import AdjustIcon from "@mui/icons-material/Adjust";
+import React from "react";
 
-const OrderCard = () => {
+const OrderCard = ({ order }) => {
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "DELIVERED":
+        return "success.main";
+      case "SHIPPED":
+        return "warning.main";
+      case "CANCELLED":
+        return "error.main";
+      case "PENDING":
+        return "info.main";
+      default:
+        return "text.secondary";
+    }
+  };
+
+
   return (
-    <div className="p-5 shadow-md shadow-black hover:shadow-2xl border">
-      <Grid container spacing={2} sx={{ justifyContent: "space-between" }}>
-        <Grid item sx={6}>
-          <div className="flex cursor-pointer">
-            <img
-              className="w-[5rem] h-[5rem] object-cover object-top"
-              src="https://www.ethnicplus.in/media/mageplaza/bannerslider/banner/image/1/2/12_4.jpg"
-              alt="Order Card"
-            />
-            <div className="ml-5 space-y-2">
-              <p className="">Men Slice Mid Rise Black Jeans</p>
-              <p className="opacity-50 text-xs font-semibold">Size: M</p>
-              <p className="opacity-50 text-xs font-semibold">Color: Black</p>
-            </div>
-          </div>
+    <Box
+      sx={{
+        p: 3,
+        bgcolor: "white",
+        borderRadius: 2,
+        boxShadow: 3,
+        "&:hover": { boxShadow: 5 },
+      }}
+    >
+      <Grid container spacing={2} sx={{ alignItems: "center" }}>
+        {/* Product Image and Details */}
+        <Grid item xs={12} md={6}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <AvatarGroup>
+            {order.orderItemList.map((orderItem) => (
+                     <Avatar src={orderItem.product.imageUrl}></Avatar>
+            ))}
+            </AvatarGroup>
+            <Box>
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+              {order.orderItemList.map((orderItem) => (
+                      <p key={orderItem.id}>{orderItem.product.title}</p>
+                ))}
+              </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                Size: {order.orderItemList.map((orderItem) => (
+                      <span key={orderItem.id}>{orderItem.size}</span>
+                ))}
+              </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                Color: {order.orderItemList.map((orderItem) => (
+                      <span key={orderItem.id}>{orderItem.product.color}</span>
+                ))}
+              </Typography>
+            </Box>
+          </Box>
         </Grid>
-        <Grid item xs={2}>
-          <p>$945</p>
+
+        {/* Price */}
+        <Grid item xs={6} md={2}>
+          <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            ${order.totalPrice}
+          </Typography>
         </Grid>
-        <Grid item xs={4}>
-          {true && (
-            <div>
-              <p>
-                <AdjustIcon
-                  sx={{ width: "15px", height: "15px" }}
-                  className="text-green-600 mr-2 text-sm"
-                />{" "}
-                <span>Deliver On March</span>
-              </p>
-              <p className="text-xs">Your Items Has Been Deliverd</p>
-            </div>
-          )}
-          {false && (
-            <p>
-              {" "}
-              <span>Expected Delivery On March</span>
-            </p>
-          )}
+
+        {/* Delivery Status */}
+        <Grid item xs={6} md={4}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <AdjustIcon sx={{ color: getStatusColor(order.orderStatus), fontSize: 16 }} />
+            <Typography variant="body1">
+              {order.orderStatus}
+            </Typography>
+          </Box>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            {order.orderStatus === "DELIVERED"
+              ? `Delivered on ${new Date(order.deliveryDate).toLocaleDateString()}`
+              : "Your item is on the way"}
+          </Typography>
         </Grid>
       </Grid>
-    </div>
+    </Box>
   );
 };
 

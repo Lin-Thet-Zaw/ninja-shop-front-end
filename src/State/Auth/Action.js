@@ -64,7 +64,7 @@ export const login = (userData) => async (dispatch) => {
       localStorage.setItem("jwt", user.jwt);
     }
 
-    dispatch(loginSuccess(user));
+    dispatch(loginSuccess(user)); // Ensure this updates the `auth` state correctly
     toast.success("Login successful!");
   } catch (error) {
     let errorMessage = "An unknown error occurred.";

@@ -1,81 +1,73 @@
 export const navigation = {
   categories: [
     {
-      id: 'women',
-      name: 'Women',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '/women/new-arrivals',
-          imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
-        },
-        {
-          name: 'Basic Tees',
-          href: '/women/basictees',
-          imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
-        },
-      ],
+      id: 'menu',
+      name: 'Menu',
+      // featured: [
+      //   {
+      //     name: 'New Arrivals',
+      //     href: '/women/new-arrivals',
+      //     imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-01.jpg',
+      //     imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+      //   },
+      //   {
+      //     name: 'Basic Tees',
+      //     href: '/women/basictees',
+      //     imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/mega-menu-category-02.jpg',
+      //     imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+      //   },
+      // ],
       sections: [
         {
-          id: 'clothing',
-          name: 'Clothing',
+          id: 'products',
+          name: 'Products',
           items: [
-            { name: 'Tops', href: '/women/clothing/tops' },
-            { name: 'Dresses', href: '/women/clothing/dresses' },
-            { name: 'Pants', href: '/women/clothing/pants' },
-            { name: 'Denim', href: '/women/clothing/denim' },
-            { name: 'Sweaters', href: '/women/clothing/sweaters' },
-            { name: 'T-Shirts', href: '/women/clothing/tshirts' },
-            { name: 'Jackets', href: '/women/clothing/jackets' },
-            { name: 'Activewear', href: '/women/clothing/activewear' },
-            { name: 'Browse All', href: '/women/clothing/Browse All' },
+            { name: 'Tops', href: '/menu/products/tops' },
+            { name: 'Accessories', href: '/menu/products/tops' },
+            { name: 'Dresses', href: '/menu/products/dresses' },
+            { name: 'Pants', href: '/menu/products/pants' },
+            { name: 'Denim', href: '/menu/products/denim' },
+            { name: 'Sweaters', href: '/menu/products/sweaters' },
+            { name: 'T-Shirts', href: '/menu/products/tshirts' },
+            { name: 'Jackets', href: '/menu/products/jackets' },
+            { name: 'Activewear', href: '/menu/products/activewear' },
+            { name: 'Browse All', href: '/menu/products/Browse All' },
           ],
         },
         {
-          id: 'accessories',
-          name: 'Accessories',
+          id: 'trackingorder',
+          name: 'Tracking Order',
           items: [
-            { name: 'Watches', href: '/women/accessories/watches' },
-            { name: 'Wallets', href: '/women/accessories/wallet' },
-            { name: 'Bags', href: '/women/accessories/bags' },
-            { name: 'Sunglasses', href: '/women/accessories/sunglasses' },
-            { name: 'Hats', href: '/women/accessories/hats' },
-            { name: 'Belts', href: '/women/accessories/belts' },
+            { name: 'Tracking Order', href: '/menu/tracking-orders' },
           ],
         },
         {
-          id: 'brands',
-          name: 'Brands',
+          id: 'filter',
+          name: 'Filter',
           items: [
-            { name: 'Full Nelson', href: '/women/brands/full-nelson' },
-            { name: 'My Way', href: '/women/brands/my-way' },
-            { name: 'Re-Arranged', href: '/women/brands/re-arranged' },
-            { name: 'Counterfeit', href: '/women/brands/counterfeit' },
-            { name: 'Significant Other', href: '/women/brands/significant-other' },
+            { name: 'Filters', href: '/filters/filters' },
           ],
         },
       ],
     },
     {
-      id: 'men',
-      name: 'Men',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '/men/featured/new-arrivals',
-          imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
-        },
-        {
-          name: 'Artwork Tees',
-          href: '/men/featured/artwork-tees',
-          imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/category-page-02-image-card-06.jpg',
-          imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
-        },
-      ],
+      id: 'category',
+      name: 'Category',
+      // featured: [
+      //   {
+      //     name: 'New Arrivals',
+      //     href: '/men/featured/new-arrivals',
+      //     imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
+      //     imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
+      //   },
+      //   {
+      //     name: 'Artwork Tees',
+      //     href: '/men/featured/artwork-tees',
+      //     imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/category-page-02-image-card-06.jpg',
+      //     imageAlt:
+      //       'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
+      //   },
+      // ],
       sections: [
         {
           id: 'clothing',

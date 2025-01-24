@@ -1,6 +1,3 @@
-
-import { InboxIcon } from "@heroicons/react/24/outline";
-import EmailIcon from "@mui/icons-material/Email";
 import {
   Box,
   CssBaseline,
@@ -12,33 +9,54 @@ import {
   ListItemText,
   useMediaQuery,
   useTheme,
+  IconButton,
+  Toolbar,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
-import InventoryIcon from '@mui/icons-material/Inventory';
-import AddIcon from '@mui/icons-material/Add';
+import InventoryIcon from "@mui/icons-material/Inventory";
+import AddIcon from "@mui/icons-material/Add";
+import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
+import HomeIcon from "@mui/icons-material/Home";
 import Dashboard from "./componenets/Dashboard";
 import CreateProductForm from "./componenets/CreateProductForm";
 import ProductsTable from "./componenets/ProductsTable";
 import OrdersTable from "./componenets/OrdersTable";
 import CustomersTable from "./componenets/CustomersTable";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../State/Auth/Action";
+
 const menu = [
+  { name: "Home", path: "/", icon: <HomeIcon /> },
   { name: "Dashboard", path: "/admin", icon: <DashboardIcon /> },
-  { name: "Products", path: "/admin/products", icon: <InventoryIcon />},
-  {
-    name: "Customer",
-    path: "/admin/customers",
-    icon: <SupervisedUserCircleIcon />,
-  },
-  { name: "AddProduct", path: "/admin/product/create",icon: <AddIcon />  },
+  { name: "Products", path: "/admin/products", icon: <InventoryIcon /> },
+  { name: "Add Product", path: "/admin/product/create", icon: <AddIcon /> },
 ];
+
 const Admin = () => {
   const theme = useTheme();
-//   const isLargetScreen = useMediaQuery(theme.breakpoints.up("lg"));
-  const [sizeBarVisible, setSizeBarVisible] = useState(false);
-  const navvigate = useNavigate();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { auth } = useSelector((store) => store);
+
+  const jwt = localStorage.getItem("jwt");
+  if (auth?.user === null || jwt === null) {
+    navigate("/");
+  }
+
+  // Logout function
+  const handleLogout = () => {
+    dispatch(logout()); // Dispatch the logout action
+    navigate("/"); // Navigate to the homepage
+  };
+
+  // Sidebar content
   const drawer = (
     <Box
       sx={{
@@ -46,55 +64,109 @@ const Admin = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        height:"100%"
+        height: "100%",
+        width: 240,
       }}
     >
-      {/* {isLargetScreen && <Toolbar />} */}
-      <>
+      {/* Menu Items */}
       <List>
-        {menu.map((item, index) => (
+        {menu.map((item) => (
           <ListItem
             key={item.name}
             disablePadding
-            onClick={() => navvigate(item.path)}
+            onClick={() => {
+              navigate(item.path);
+              setSidebarVisible(false); // Close sidebar on navigation for small screens
+            }}
           >
-            <ListItemButton>
+            <ListItemButton
+              sx={{
+                backgroundColor:
+                  location.pathname === item.path ? "rgba(0, 0, 0, 0.08)" : "inherit",
+              }}
+            >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText>{item.name}</ListItemText>
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-      </>
+
+      {/* Logout Button */}
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={handleLogout}>
             <ListItemIcon>
-              <SupervisedUserCircleIcon />
+              <LogoutIcon />
             </ListItemIcon>
-            <ListItemText>Account</ListItemText>
+            <ListItemText>Logout</ListItemText>
           </ListItemButton>
         </ListItem>
       </List>
     </Box>
   );
+
   return (
     <div>
-      <div className="flex h-[100vh]">
+      <Box sx={{ display: "flex", height: "100vh" }}>
         <CssBaseline />
-        <div className="w-[15%] border border-r-gray-300 h-full">
-          {drawer}
-        </div>
-        <Box className="w-[85%]" component={"main"} sx={{flexGrow:1}}>
-        <Routes>
-          <Route path='/' element={<Dashboard />}></Route>
-          <Route path='/product/create' element={<CreateProductForm />}></Route>
-          <Route path='/product' element={<ProductsTable />}></Route>
-          <Route path='/orders' element={<OrdersTable />}></Route>
-          <Route path='/customer' element={<CustomersTable />}></Route>
-        </Routes>
+        {/* Sidebar for large screens */}
+        {isLargeScreen && (
+          <Box
+            sx={{
+              width: 240,
+              flexShrink: 0,
+              borderRight: "1px solid rgba(0, 0, 0, 0.12)",
+            }}
+          >
+            {drawer}
+          </Box>
+        )}
+        {/* Drawer for small screens */}
+        {!isLargeScreen && (
+          <Drawer
+            open={sidebarVisible}
+            onClose={() => setSidebarVisible(false)}
+            sx={{
+              "& .MuiDrawer-paper": {
+                width: 240,
+              },
+            }}
+          >
+            {drawer}
+          </Drawer>
+        )}
+        {/* Main content */}
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            width: isLargeScreen ? "calc(100% - 240px)" : "100%",
+          }}
+        >
+          {/* Toolbar with menu button for small screens */}
+          {!isLargeScreen && (
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={() => setSidebarVisible(true)}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Toolbar>
+          )}
+          {/* Routes */}
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/product/create" element={<CreateProductForm />} />
+            <Route path="/products" element={<ProductsTable />} />
+            <Route path="/orders" element={<OrdersTable />} />
+          </Routes>
         </Box>
-      </div>
+      </Box>
     </div>
   );
 };

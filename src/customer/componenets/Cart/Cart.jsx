@@ -1,64 +1,140 @@
 import React, { useEffect } from "react";
 import CartItems from "./CartItems";
-import { Button } from "@mui/material";
+import { Button, Box, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartItem } from "../../../State/Cart/Action";
+import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 
 const Cart = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {cart} = useSelector(store=>store);
+  const { auth, cart } = useSelector((store) => store);
 
-  const handelCheckout = () => {
-    navigate("/checkout?step=1")
+  const handleCheckout = () => {
+    navigate("/checkout?step=1");
+  };
+
+  if (auth?.user === null) {
+    toast.info("Plase login");
+    navigate("/");
   }
 
   useEffect(() => {
     dispatch(getCartItem());
-  },[cart.updateCartItem, cart.deleteCartItem])
+  }, [cart.updateCartItem, cart.deleteCartItem]);
 
   return (
     <div>
-      <div className="lg:grid grid-cols-3 lg:px-16 relative">
-        <div className="col-span-2">
-          {cart.cart?.cartItems.map((item) => (
-            <CartItems item={item}/>
-          ))}
-        </div>
-        <div className="px-5 sticky top-0 h-[100vh] mt-5 lg:mt-0">
-          <div className="border">
-            <p className="uppercase font-bold opacity-60">Price Details</p>
-            <hr />
-            <div className="space-y-3 font-semibold mb-10">
-              <div className="flex justify-between pt-3 text-black">
-                <span>Price</span>
-                <span>${cart.cart?.totalPrice}</span>
-              </div>
-              <div className="flex justify-between pt-3">
-                <span>Discount</span>
-                <span className="text-green-600">${cart.cart?.discounted}</span>
-              </div>
-              <div className="flex justify-between pt-3">
-                <span>Delivery Charge </span>
-                <span className="text-green-600">FREE</span>
-              </div>
-              <div className="flex justify-between pt-3">
-                <span>Total Amount</span>
-                <span className="text-green-600">${cart.cart?.totalDiscountedPrice}</span>
-              </div>
-            </div>
-            <Button
-              onClick={handelCheckout}
-              variant="contained"
-              className="w-full mt-5"
-              sx={{ px: "2.5rem", py: "0.7rem", bgcolor: "#9155fd" }}
+      <Helmet>
+        <title>Product to cart - Ninja Shop</title>
+        <meta
+          name="description"
+          content="Welcome to the homepage of our app."
+        />
+      </Helmet>
+      <Box sx={{ padding: { xs: 2, sm: 3, md: 4 } }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", lg: "row" },
+            gap: 4,
+          }}
+        >
+          {/* Cart Items Section */}
+          <Box sx={{ flex: 2, overflowY: "auto", maxHeight: "80vh" }}>
+            {cart.cart?.cartItems.map((item, index) => (
+              <CartItems key={index} item={item} />
+            ))}
+          </Box>
+
+          {/* Price Details Section */}
+          <Box
+            sx={{
+              flex: 1,
+              position: { xs: "static", lg: "sticky" },
+              top: 16,
+              height: "fit-content",
+            }}
+          >
+            <Box
+              sx={{
+                border: "1px solid #e0e0e0",
+                borderRadius: 2,
+                padding: 3,
+                backgroundColor: "#ffffff",
+              }}
             >
-              Checkout
-            </Button>
-          </div>
-        </div>
-      </div>
+              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                PRICE DETAILS
+              </Typography>
+              <Divider sx={{ mb: 2 }} />
+
+              {/* Price Breakdown */}
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography>Price</Typography>
+                  <Typography>${cart.cart?.totalPrice}</Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography>Discount</Typography>
+                  <Typography sx={{ color: "green" }}>
+                    -${cart.cart?.discounted}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography>Delivery Charge</Typography>
+                  <Typography sx={{ color: "green" }}>FREE</Typography>
+                </Box>
+                <Divider sx={{ my: 1 }} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <Typography>Total Amount</Typography>
+                  <Typography sx={{ color: "green" }}>
+                    ${cart.cart?.totalDiscountedPrice}
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* Checkout Button */}
+              <Button
+                onClick={handleCheckout}
+                variant="contained"
+                fullWidth
+                sx={{
+                  mt: 3,
+                  py: 1.5,
+                  bgcolor: "#9155fd",
+                  "&:hover": { bgcolor: "#7e4ad6" },
+                }}
+              >
+                Checkout
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
     </div>
   );
 };

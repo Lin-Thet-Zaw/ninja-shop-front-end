@@ -1,54 +1,75 @@
 import React from "react";
 import AddressCard from "../AddressCard/AddressCard";
 import OrderTracker from "./OrderTracker";
-import { Box, Grid } from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
+import { Box, Grid, Typography } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+
 const OrderDetails = () => {
   return (
-    <div>
-      <div className="px-5 lg:px-20">
-        <h1 className="font-bold text-xl py-7">Delivery Address</h1>
+    <Box sx={{ padding: { xs: 2, sm: 3, md: 4 } }}>
+      {/* Delivery Address */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+          Delivery Address
+        </Typography>
         <AddressCard />
-      </div>
-      <div className="py-20">
+      </Box>
+
+      {/* Order Tracker */}
+      <Box sx={{ mb: 4 }}>
         <OrderTracker activeStep={3} />
-      </div>
-      <Grid className="space-y-5" container>
-        {[1,1,1,1,].map((item)=>         
-        <Grid
-          item
-          container
-          className="shadow-xl rounded-md p-5 border"
-          sx={{ alignItems: "center", justifyContent: "space-between" }}
-        >
-          <Grid item xs={6}>
-            <div className="flex items-center space-x-2">
-              <img
-                className="object-cover object-center w-[5rem] h-[5rem]"
-                src="https://www.ethnicplus.in/media/mageplaza/bannerslider/banner/image/1/2/12_4.jpg"
-                alt="Product"
-              />
-              <div className="space-y-2 ml-5">
-                <p>Men Slim Mid Rise Black Jeans</p>
-                <p className="space-x-5 opacity-50 text-xs font-semibold">
-                  <span>Color: Pink</span>
-                  <span>Size: M</span>
-                </p>
-                <p>Seller : Iner</p>
-                <p>$87768</p>
-              </div>
-            </div>
-          </Grid>
-          <Grid item>
-            <Box sx={{color:deepPurple[500]}}>
-                <StarBorderIcon sx={{fontSize:"2rem"}} fontSize="2px" className="px-2"/>
-                <span>Rate and Review Product </span>
+      </Box>
+
+      {/* Order Items */}
+      <Grid container spacing={3}>
+        {[1, 1, 1, 1].map((_, index) => (
+          <Grid item xs={12} key={index}>
+            <Box
+              sx={{
+                p: 3,
+                bgcolor: "white",
+                borderRadius: 2,
+                boxShadow: 3,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              {/* Product Details */}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <img
+                  src="https://www.ethnicplus.in/media/mageplaza/bannerslider/banner/image/1/2/12_4.jpg"
+                  alt="Product"
+                  style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 8 }}
+                />
+                <Box>
+                  <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                    Men Slim Mid Rise Black Jeans
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    Color: Pink | Size: M
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    Seller: Iner
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                    $87,768
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* Rate and Review */}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <StarBorderIcon sx={{ color: "primary.main", fontSize: 24 }} />
+                <Typography variant="body1" sx={{ color: "primary.main" }}>
+                  Rate and Review Product
+                </Typography>
+              </Box>
             </Box>
           </Grid>
-        </Grid>)}
+        ))}
       </Grid>
-    </div>
+    </Box>
   );
 };
 

@@ -13,6 +13,7 @@ const CartItems = ({item}) => {
     console.log("Updata cart item",data)
     dispatch(updateCartItem(data))
   }
+  console.log("product cart", product)
 
   const handelRemoveCartItem = () => {
     dispatch(removeItemFromCart(item.id));
