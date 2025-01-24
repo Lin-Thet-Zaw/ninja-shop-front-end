@@ -59,10 +59,12 @@ export const getOrderById = (orderId) => async (dispatch) => {
 
     if (error.response) {
       console.log(error.response.data);
-    
+
       // Check for the specific error message in the response
       if (error.response.data.message === "Query did not return a unique result: 2 results were returned") {
         errorMessage = "Duplicate data found. Please ensure the data is unique.";
+      } else if (error.response.data.message === "Required header 'Authorization' is not present.") {
+        errorMessage = "You are not logged in. Please log in.";
       } else {
         errorMessage = error.response.data.message || "Server Error occurred during registration.";
       }
@@ -71,10 +73,12 @@ export const getOrderById = (orderId) => async (dispatch) => {
     } else {
       errorMessage = error.message;
     }
+
     dispatch({
       type: GET_ORDER_BY_ID_FAILUER,
-      payload: error.message,
+      payload: errorMessage,
     });
+
     // Display the error message in a toast
     toast.error(`Error: ${errorMessage}`);
   }
