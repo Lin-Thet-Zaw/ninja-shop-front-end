@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { api, setAuthHeader } from "../../config/apiConfig";
 import {
   COMFIRMED_ORDER_FAILUER,
@@ -48,16 +49,34 @@ export const getOrderById = (orderId) => async (dispatch) => {
   try {
     const { data } = await api.get(`/api/orders/${orderId}`);
     console.log("get order by id", data);
+    toast.success("Success!");
     dispatch({
       type: GET_ORDER_BY_ID_SUCCESS,
       payload: data,
     });
   } catch (error) {
-    console.log("get order by id error ", error);
+    let errorMessage = "An unknown error occurred.";
+
+    if (error.response) {
+      console.log(error.response.data);
+    
+      // Check for the specific error message in the response
+      if (error.response.data.message === "Query did not return a unique result: 2 results were returned") {
+        errorMessage = "Duplicate data found. Please ensure the data is unique.";
+      } else {
+        errorMessage = error.response.data.message || "Server Error occurred during registration.";
+      }
+    } else if (error.request) {
+      errorMessage = "Network Error: Unable to connect to the server.";
+    } else {
+      errorMessage = error.message;
+    }
     dispatch({
       type: GET_ORDER_BY_ID_FAILUER,
       payload: error.message,
     });
+    // Display the error message in a toast
+    toast.error(`Error: ${errorMessage}`);
   }
 };
 

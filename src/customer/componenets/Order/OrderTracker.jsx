@@ -61,6 +61,7 @@ const OrderTracker = () => {
             value={inputOrderId}
             onChange={handleInputChange}
             fullWidth
+            type="number"
           />
           <Button type="submit" variant="contained" color="primary">
             Track Order

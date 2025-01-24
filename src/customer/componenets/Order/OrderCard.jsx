@@ -54,6 +54,9 @@ const OrderCard = ({ order }) => {
                       <span key={orderItem.id}>{orderItem.product.color}</span>
                 ))}
               </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                Tracking Code: {order.id}
+              </Typography>
             </Box>
           </Box>
         </Grid>
