@@ -42,6 +42,8 @@ export const createOrder = (reqData) => async (dispatch) => {
 };
 
 export const getOrderById = (orderId) => async (dispatch) => {
+  const jwt = localStorage.getItem("jwt");
+  setAuthHeader(jwt); // Add the Authorization header
 
   dispatch({ type: GET_ORDER_BY_ID_REQUEST });
   try {
