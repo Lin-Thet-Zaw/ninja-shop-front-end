@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { findProductById } from "../../../State/Product/Action";
 import { addItemToCart } from "../../../State/Cart/Action";
 import { Helmet } from "react-helmet";
+import Footer from "../HomeSectionCarousel/Footer/Footer";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -41,8 +42,8 @@ export default function ProductDetails() {
     dispatch(findProductById(data));
   }, [params.productId]);
 
-return (
-    <div>
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Helmet>
         <title>Product Details - Ninja Shop</title>
         <meta
@@ -50,7 +51,7 @@ return (
           content="Welcome to the homepage of our app."
         />
       </Helmet>
-      <Box sx={{ padding: { xs: 2, sm: 3, md: 4 } }}>
+      <Box sx={{ padding: { xs: 2, sm: 3, md: 4 }, flex: 1 }}>
         <Box
           sx={{
             display: "flex",
@@ -67,7 +68,7 @@ return (
                 overflow: "hidden",
                 borderRadius: 2,
                 maxWidth: "100%",
-                maxHeight: { xs: "300px", sm: "400px", md: "500px" },
+                height: { xs: "300px", sm: "400px", md: "500px" },
               }}
             >
               <img
@@ -75,33 +76,6 @@ return (
                 alt={products.product?.title}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                justifyContent: "center",
-                flexWrap: "wrap",
-              }}
-            >
-              {/* Additional Images */}
-              {/* {products.product?.images.map((image, index) => (
-              <Box
-                key={index}
-                sx={{
-                  width: 80,
-                  height: 80,
-                  borderRadius: 2,
-                  overflow: "hidden",
-                }}
-              >
-                <img
-                  src={image}
-                  alt={`Product Image ${index + 1}`}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </Box>
-            ))} */}
             </Box>
           </Box>
 
@@ -202,86 +176,8 @@ return (
             </Box>
           </Box>
         </Box>
-
-        {/* Reviews and Ratings Section */}
-        {/* <Box sx={{ mt: 6 }}>
-          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-            Recent Reviews and Ratings
-          </Typography>
-          <Box
-            sx={{
-              border: "1px solid #e0e0e0",
-              borderRadius: 2,
-              p: 3,
-              maxHeight: "400px",
-              overflowY: "auto",
-            }}
-          >
-            <Grid container spacing={4}>
-              <Grid item xs={12} md={7}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                  {[1, 1, 1, 1].map((_, index) => (
-                    <ProductReviewCard key={index} />
-                  ))}
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={5}>
-                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-                  Product Ratings
-                </Typography>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}
-                >
-                  <Rating value={4.5} precision={0.5} readOnly />
-                  <Typography variant="body2" sx={{ opacity: 0.6 }}>
-                    5345 Ratings
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                  {["Excellent", "Good", "Average", "Poor"].map(
-                    (label, index) => (
-                      <Box
-                        key={index}
-                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
-                      >
-                        <Typography variant="body2" sx={{ width: 80 }}>
-                          {label}
-                        </Typography>
-                        <LinearProgress
-                          variant="determinate"
-                          value={40}
-                          sx={{ flex: 1, height: 8, borderRadius: 4 }}
-                        />
-                      </Box>
-                    )
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box> */}
-
-        {/* Similar Products Section */}
-        {/* <Box sx={{ mt: 6 }}>
-          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-            Similar Products
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 3,
-              overflowX: "auto",
-              pb: 2,
-            }}
-          >
-            {[1, 1, 1, 1].map((_, index) => (
-              <Box key={index} sx={{ minWidth: "250px" }}>
-                <HomeSectionCard />
-              </Box>
-            ))}
-          </Box>
-        </Box> */}
       </Box>
+      <Footer/>
     </div>
   );
 }

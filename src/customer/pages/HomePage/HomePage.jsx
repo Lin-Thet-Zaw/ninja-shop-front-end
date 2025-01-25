@@ -5,6 +5,7 @@ import HomeSectionCarousel from "../../componenets/HomeSectionCarousel/HomeSecti
 import { Helmet } from "react-helmet";
 import { CircularProgress } from "@mui/material";
 import { getAllProducts } from "../../../State/Product/Action";
+import Footer from "../../componenets/HomeSectionCarousel/Footer/Footer";
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -55,6 +56,7 @@ function HomePage() {
             />
           ))}
       </div>
+      <Footer/>
     </div>
   );
 }

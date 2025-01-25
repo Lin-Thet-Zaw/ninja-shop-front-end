@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCartItem } from "../../../State/Cart/Action";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
+import Footer from "../HomeSectionCarousel/Footer/Footer";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Cart = () => {
   };
 
   if (auth?.user === null) {
-    toast.info("Plase login");
+    toast.info("Please login");
     navigate("/");
   }
 
@@ -26,15 +27,20 @@ const Cart = () => {
   }, [cart.updateCartItem, cart.deleteCartItem]);
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh", // Ensures the content takes up the full height
+      }}
+    >
       <Helmet>
         <title>Product to cart - Ninja Shop</title>
-        <meta
-          name="description"
-          content="Welcome to the homepage of our app."
-        />
+        <meta name="description" content="Welcome to the homepage of our app." />
       </Helmet>
-      <Box sx={{ padding: { xs: 2, sm: 3, md: 4 } }}>
+      
+      {/* Main Content Section */}
+      <Box sx={{ flex: 1, padding: { xs: 2, sm: 3, md: 4 }, paddingBottom: "100px" }}>
         <Box
           sx={{
             display: "flex",
@@ -73,32 +79,17 @@ const Cart = () => {
 
               {/* Price Breakdown */}
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography>Price</Typography>
                   <Typography>${cart.cart?.totalPrice}</Typography>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography>Discount</Typography>
                   <Typography sx={{ color: "green" }}>
                     -${cart.cart?.discounted}
                   </Typography>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography>Delivery Charge</Typography>
                   <Typography sx={{ color: "green" }}>FREE</Typography>
                 </Box>
@@ -135,6 +126,9 @@ const Cart = () => {
           </Box>
         </Box>
       </Box>
+
+      {/* Footer Section */}
+      <Footer />
     </div>
   );
 };

@@ -84,6 +84,45 @@ export const getOrderById = (orderId) => async (dispatch) => {
   }
 };
 
+export const getOrderByTrackId = (trackId) => async (dispatch) => {
+  dispatch({ type: GET_ORDER_BY_ID_REQUEST });
+  try {
+    const { data } = await api.get(`/api/orders/${trackId}/track`);
+    console.log("get order by track id", data);
+    toast.success("Success!");
+    dispatch({
+      type: GET_ORDER_BY_ID_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    let errorMessage = "An unknown error occurred.";
+
+    if (error.response) {
+      console.log(error.response.data);
+
+      // Check for the specific error message in the response
+      if (error.response.data.message === "Query did not return a unique result: 2 results were returned") {
+        errorMessage = "Duplicate data found. Please ensure the data is unique.";
+      } else if (error.response.data.message === "Required header 'Authorization' is not present.") {
+        errorMessage = "You are not logged in. Please log in.";
+      } else {
+        errorMessage = error.response.data;
+      }
+    } else if (error.request) {
+      errorMessage = "Network Error: Unable to connect to the server.";
+    } else {
+      errorMessage = error.message;
+    }
+
+    dispatch({
+      type: GET_ORDER_BY_ID_FAILUER,
+      payload: errorMessage,
+    });
+
+    // Display the error message in a toast
+    toast.error(`Error: ${errorMessage}`);
+  }
+};
 export const comfirmedOrder = (reqData) => async (dispatch) => {
   const jwt = localStorage.getItem("jwt");
   setAuthHeader(jwt); // Add the Authorization header

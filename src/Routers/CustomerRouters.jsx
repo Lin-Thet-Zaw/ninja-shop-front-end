@@ -30,9 +30,6 @@ const CustomerRouters = () => {
         <Route path='/menu/tracking-orders' element={<OrderTracker/>}/>
         <Route path='/account/order/:orderId' element={<OrderDetails />} />
       </Routes>
-      <div>
-        <Footer />
-      </div>
     </div>
   );
 };

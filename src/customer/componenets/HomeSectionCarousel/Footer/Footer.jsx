@@ -130,7 +130,7 @@ const Footer = () => {
                   justifyContent: { xs: "center", sm: "flex-start" },
                 }}
               >
-                  {text}
+                {text}
               </Button>
             ))}
           </Grid>
@@ -143,37 +143,8 @@ const Footer = () => {
           variant="body2"
           sx={{ fontSize: { xs: "0.75rem", sm: "1rem" } }}
         >
-         © {new Date().getFullYear()} My Company. All rights reserved.
+          © {new Date().getFullYear()} My Company. All rights reserved.
         </Typography>
-        {/* <Typography
-          variant="body2"
-          sx={{ fontSize: { xs: "0.75rem", sm: "1rem" } }}
-        >
-          Made with ❤️ by Me.
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{ fontSize: { xs: "0.75rem", sm: "1rem" } }}
-        >
-          Icons made by{" "}
-          <a
-            href="https://www.flaticon.com/authors/freepik"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline"
-          >
-            Freepik
-          </a>{" "}
-          from{" "}
-          <a
-            href="https://www.flaticon.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline"
-          >
-            www.flaticon.com
-          </a>
-        </Typography> */}
       </div>
     </div>
   );

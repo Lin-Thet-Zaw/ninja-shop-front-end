@@ -39,7 +39,7 @@ const OrdersTable = () => {
   }
 
   if(auth?.user === null){
-    toast.info("Please login")
+    // toast.info("Please login")
     navigate("/")
   }
 

@@ -22,7 +22,7 @@ const CreateProductForm = () => {
 
   console.log("Admin create product page", auth)
   if (auth?.user === null) {
-    toast.info("Plase login");
+    // toast.info("Plase login");
     navigate("/");
   }
   if (auth?.user?.role != "admin") {

@@ -12,7 +12,7 @@ const navigate = useNavigate();
 
 console.log("Admin Dashboard", auth)
   if (auth?.user === null) {
-    toast.info("Plase login");
+    // toast.info("Plase login");
     navigate("/");
   }
   if (auth?.user?.role != "admin") {

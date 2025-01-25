@@ -18,7 +18,6 @@ const OrderCard = ({ order }) => {
     }
   };
 
-
   return (
     <Box
       sx={{
@@ -32,30 +31,30 @@ const OrderCard = ({ order }) => {
       <Grid container spacing={2} sx={{ alignItems: "center" }}>
         {/* Product Image and Details */}
         <Grid item xs={12} md={6}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <AvatarGroup>
-            {order.orderItemList.map((orderItem) => (
-                     <Avatar src={orderItem.product.imageUrl}></Avatar>
-            ))}
+          <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, alignItems: "center", gap: 2 }}>
+            <AvatarGroup sx={{ flexWrap: "wrap" }}>
+              {order.orderItemList.map((orderItem) => (
+                <Avatar key={orderItem.id} src={orderItem.product.imageUrl} />
+              ))}
             </AvatarGroup>
             <Box>
               <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-              {order.orderItemList.map((orderItem) => (
-                      <p key={orderItem.id}>{orderItem.product.title}</p>
+                {order.orderItemList.map((orderItem) => (
+                  <p key={orderItem.id}>{orderItem.product.title}</p>
                 ))}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 Size: {order.orderItemList.map((orderItem) => (
-                      <span key={orderItem.id}>{orderItem.size}</span>
+                  <span key={orderItem.id}>{orderItem.size}</span>
                 ))}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 Color: {order.orderItemList.map((orderItem) => (
-                      <span key={orderItem.id}>{orderItem.product.color}</span>
+                  <span key={orderItem.id}>{orderItem.product.color}</span>
                 ))}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                Tracking Code: {order.id}
+                Tracking Code: {order.trackId}
               </Typography>
             </Box>
           </Box>

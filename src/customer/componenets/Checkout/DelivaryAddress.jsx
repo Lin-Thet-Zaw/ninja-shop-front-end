@@ -1,14 +1,12 @@
 import { Box, Button, Grid, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createOrder } from "../../../State/Order/Action";
 
 const DelivaryAddress = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { order } = useSelector((store) => store);
-  const address = order.order?.shippingAddress || {};
 
   // State to track form data
   const [formData, setFormData] = useState({

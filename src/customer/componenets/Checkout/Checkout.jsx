@@ -18,10 +18,10 @@ export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
   const location = useLocation();
   const navigate = useNavigate();
-  const { auth, order } = useSelector((store) => store);
+  const { auth } = useSelector((store) => store);
 
   if (auth?.user === null) {
-    toast.info("Plase login");
+    toast.info("Please login");
     navigate("/");
   }
 
@@ -54,16 +54,13 @@ export default function Checkout() {
   };
 
   return (
-    <div className="px-10 lg:px-20">
+    <div className="px-4 sm:px-8 lg:px-20">
       <Helmet>
         <title>Check out - Ninja Shop</title>
-        <meta
-          name="description"
-          content="Welcome to the homepage of our app."
-        />
+        <meta name="description" content="Welcome to the homepage of our app." />
       </Helmet>
       <Box sx={{ width: "100%" }}>
-        <Stepper activeStep={activeStep}>
+        <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel>{label}</StepLabel>
@@ -72,11 +69,13 @@ export default function Checkout() {
         </Stepper>
         {activeStep === steps.length ? (
           <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
+            All steps completed - you're finished
           </Typography>
         ) : (
           <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              Step {activeStep + 1}
+            </Typography>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
                 color="inherit"
@@ -87,7 +86,7 @@ export default function Checkout() {
                 Back
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
-              <Button disabled={activeStep === 2} onClick={handleNext}>
+              <Button disabled={activeStep === 1} onClick={handleNext}>
                 {activeStep === steps.length - 1 ? "Finish" : "Next"}
               </Button>
             </Box>
@@ -96,7 +95,7 @@ export default function Checkout() {
               {activeStep === 0 && <p>Login</p>}
               {activeStep === 1 && <DelivaryAddress />}
               {activeStep === 2 && <OrderSummary />}
-              {activeStep === 3 && <p></p>}
+              {activeStep === 3 && <p>Confirmed</p>}
             </div>
           </React.Fragment>
         )}
