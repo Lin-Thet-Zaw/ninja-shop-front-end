@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// export const API_BASE_URL ="https://ecommerce-server-production-a391.up.railway.app"
+export const API_BASE_URL ="https://ecommerce-server-production-a391.up.railway.app"
 
-export const API_BASE_URL = "http://localhost:8080"
+// export const API_BASE_URL = "http://localhost:8080"
 
 // Create a base axios instance without the Authorization header
 export const api = axios.create({
