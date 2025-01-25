@@ -24,10 +24,24 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const OrdersTable = () => {
   const dispatch = useDispatch();
-  const { adminOrder } = useSelector((store) => store);
+  const { adminOrder, auth } = useSelector((store) => store);
+  const  navigate = useNavigate();
+
+  console.log("Admin orders", auth)
+  if(auth?.user?.role != "admin"){
+  toast.info("You are not admin")
+  navigate("/")
+  }
+
+  if(auth?.user === null){
+    toast.info("Please login")
+    navigate("/")
+  }
 
   const [anchorElMap, setAnchorElMap] = React.useState({});
 

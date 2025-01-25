@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createProduct } from "../../State/Product/Action";
 import {
@@ -12,17 +12,36 @@ import {
   Select,
   Button,
 } from "@mui/material";
+import { toast } from "react-toastify";
 
 const CreateProductForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const jwt = localStorage.getItem("jwt");
+  const {auth} = useSelector((store)=>store)
+
+  console.log("Admin create product page", auth)
+  if (auth?.user === null) {
+    toast.info("Plase login");
+    navigate("/");
+  }
+  if (auth?.user?.role != "admin") {
+    toast.info("Your not admin")
+    navigate("/");
+  }
 
   const initialSize = [
     { name: "L", quantity: 0 },
     { name: "M", quantity: 0 },
     { name: "S", quantity: 0 },
   ];
+
+  // Default category data
+  const defaultCategories = {
+    topLevelCategories: ["Woman", "Man", "Kids"],
+    secondLevelCategories: ["Clothing", "Accessories", "Brands"],
+    thirdLevelCategories: ["Tops", "Trending", "Best Sales"],
+  };
 
   const [productData, setProductData] = useState({
     image: "",
@@ -40,9 +59,23 @@ const CreateProductForm = () => {
     description: "",
   });
 
+  const [customCategories, setCustomCategories] = useState({
+    topLevelCategory: "",
+    secondLevelCategory: "",
+    thirdLevelCategory: "",
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleCustomCategoryChange = (e) => {
+    const { name, value } = e.target;
+    setCustomCategories((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -85,24 +118,27 @@ const CreateProductForm = () => {
       !price ||
       !discountedPercent ||
       !quantity ||
-      !topLevelCategory ||
-      !secondLevelCategory ||
-      !thirdLevelCategory ||
       !description
     ) {
       return false;
     }
 
     // Check if all sizes have valid values
-    const isSizeValid = size.every(
-      (size) => size.name.trim() !== ""
-    );
+    const isSizeValid = size.every((size) => size.name.trim() !== "");
 
     return isSizeValid;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Use custom categories if provided, otherwise use default categories
+    const finalTopLevelCategory =
+      customCategories.topLevelCategory || productData.topLevelCategory;
+    const finalSecondLevelCategory =
+      customCategories.secondLevelCategory || productData.secondLevelCategory;
+    const finalThirdLevelCategory =
+      customCategories.thirdLevelCategory || productData.thirdLevelCategory;
 
     const formData = new FormData();
     formData.append("image", productData.image);
@@ -113,9 +149,9 @@ const CreateProductForm = () => {
     formData.append("price", productData.price);
     formData.append("discountedPercent", productData.discountedPercent);
     formData.append("quantity", productData.quantity);
-    formData.append("topLevelCategory", productData.topLevelCategory);
-    formData.append("secondLevelCategory", productData.secondLevelCategory);
-    formData.append("thirdLevelCategory", productData.thirdLevelCategory);
+    formData.append("topLevelCategory", finalTopLevelCategory);
+    formData.append("secondLevelCategory", finalSecondLevelCategory);
+    formData.append("thirdLevelCategory", finalThirdLevelCategory);
     formData.append("description", productData.description);
     formData.append("sizes", JSON.stringify(productData.size));
 
@@ -214,6 +250,37 @@ const CreateProductForm = () => {
                 required
               />
             </Grid>
+
+            {/* Customizable Category Inputs */}
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="Custom Top Level Category"
+                name="topLevelCategory"
+                value={customCategories.topLevelCategory}
+                onChange={handleCustomCategoryChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="Custom Second Level Category"
+                name="secondLevelCategory"
+                value={customCategories.secondLevelCategory}
+                onChange={handleCustomCategoryChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="Custom Third Level Category"
+                name="thirdLevelCategory"
+                value={customCategories.thirdLevelCategory}
+                onChange={handleCustomCategoryChange}
+              />
+            </Grid>
+
+            {/* Default Category Dropdowns */}
             <Grid item xs={12} sm={4}>
               <FormControl fullWidth>
                 <InputLabel>Top Level Category</InputLabel>
@@ -224,9 +291,11 @@ const CreateProductForm = () => {
                   label="Top Level Category"
                   required
                 >
-                  <MenuItem value="woman">Woman</MenuItem>
-                  <MenuItem value="man">Man</MenuItem>
-                  <MenuItem value="kids">Kids</MenuItem>
+                  {defaultCategories.topLevelCategories.map((category, index) => (
+                    <MenuItem key={index} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -240,9 +309,11 @@ const CreateProductForm = () => {
                   label="Second Level Category"
                   required
                 >
-                  <MenuItem value="clothing">Clothing</MenuItem>
-                  <MenuItem value="accessories">Accessories</MenuItem>
-                  <MenuItem value="brands">Brands</MenuItem>
+                  {defaultCategories.secondLevelCategories.map((category, index) => (
+                    <MenuItem key={index} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -256,12 +327,15 @@ const CreateProductForm = () => {
                   label="Third Level Category"
                   required
                 >
-                  <MenuItem value="top">Tops</MenuItem>
-                  <MenuItem value="trending">Trending</MenuItem>
-                  <MenuItem value="bestsales">Best Sales</MenuItem>
+                  {defaultCategories.thirdLevelCategories.map((category, index) => (
+                    <MenuItem key={index} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -285,7 +359,6 @@ const CreateProductForm = () => {
                     onChange={(event) => handleSizeChange(event, index)}
                     required
                     fullWidth
-                    
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>

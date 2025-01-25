@@ -28,6 +28,7 @@ import OrdersTable from "./componenets/OrdersTable";
 import CustomersTable from "./componenets/CustomersTable";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../State/Auth/Action";
+import { toast } from "react-toastify";
 
 const menu = [
   { name: "Home", path: "/", icon: <HomeIcon /> },
@@ -44,10 +45,14 @@ const Admin = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { auth } = useSelector((store) => store);
-
-  const jwt = localStorage.getItem("jwt");
-  if (auth?.user === null || jwt === null) {
+  if (auth?.user?.role != "admin") {
+    toast.info("Your not admin")
     navigate("/");
+  }
+
+  if(auth?.user === null){
+    toast.info("Please login")
+    navigate("/")
   }
 
   // Logout function

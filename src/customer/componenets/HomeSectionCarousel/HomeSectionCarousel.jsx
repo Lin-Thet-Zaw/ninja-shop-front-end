@@ -4,7 +4,6 @@ import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 
 const HomeSectionCarousel = ({ sectionName, products }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -35,7 +34,7 @@ const HomeSectionCarousel = ({ sectionName, products }) => {
 
   return (
     <div className="border">
-      <h2 className="text-2xl font-extrabold text-gray-800 py-5 px-7">{sectionName}</h2>
+      <h2 className="text-2xl font-extrabold text-gray-800 py-5 px-7">{sectionName.toUpperCase()}</h2>
       <div className="relative p-6">
         <AliceCarousel
           items={items}
