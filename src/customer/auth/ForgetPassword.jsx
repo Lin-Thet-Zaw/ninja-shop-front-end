@@ -1,24 +1,24 @@
-import { Button, Grid, TextField, useMediaQuery, Box, Typography } from '@mui/material';
+import { Button, Grid, TextField, useMediaQuery, Box, Typography, CircularProgress } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../State/Auth/Action';
-import { CircularProgress } from '@mui/material';
+import { forgetPassword } from '../../State/Auth/ForgetPassword/Action';
 
-const LoginForm = () => {
+const ForgetPassword = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isSmallScreen = useMediaQuery('(max-width:600px)'); // Detect small screens
-  const isLoading = useSelector(state => state.auth.isLoading);
-  
+  const { passwordReset } = useSelector(store => store);
+  const isLoading = passwordReset?.isLoading; // Extract isLoading from passwordReset state
+  const message = passwordReset?.message;
+
   const handelSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const userData = {
       email: data.get('email'),
-      password: data.get('password'),
     };
-    dispatch(login(userData));
+    dispatch(forgetPassword(userData)); // Dispatch forgetPassword action
     console.log('User Data', userData);
   };
 
@@ -47,18 +47,6 @@ const LoginForm = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              required
-              id="password"
-              name="password"
-              label="Password"
-              fullWidth
-              type="password"
-              autoComplete="password"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12}>
             <Button
               size="large"
               variant="contained"
@@ -75,10 +63,10 @@ const LoginForm = () => {
               {isLoading ? (
                 <>
                   <CircularProgress size={24} color="inherit" sx={{ marginRight: 2 }} />
-                  Login...
+                  Sending reset link...
                 </>
               ) : (
-                'Login'
+                'Reset Password'
               )}
             </Button>
           </Grid>
@@ -92,34 +80,17 @@ const LoginForm = () => {
           mt: 2,
         }}
       >
-        <Typography variant="body2">Don't have an account?</Typography>
+        <Typography variant="body2">Remember your password?</Typography>
         <Button
-          onClick={() => navigate('/register')}
+          onClick={() => navigate('/login')}
           size="small"
           sx={{ mt: 1 }}
         >
-          Register
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          mt: 2,
-        }}
-      >
-        <Typography variant="body2">Forget password?</Typography>
-        <Button
-          onClick={() => navigate('/forget-password')}
-          size="small"
-          sx={{ mt: 1 }}
-        >
-          Forget Password
+          Login
         </Button>
       </Box>
     </Box>
   );
 };
 
-export default LoginForm;
+export default ForgetPassword;

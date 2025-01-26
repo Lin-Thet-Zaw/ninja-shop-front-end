@@ -45,7 +45,7 @@ export const register = (userData) => async (dispatch) => {
     }
 
     dispatch(registerFailer(errorMessage));
-    toast.error(`Registration failed: ${errorMessage}`);
+    toast.error(errorMessage);
   }
 };
 
@@ -78,7 +78,7 @@ export const login = (userData) => async (dispatch) => {
     }
 
     dispatch(loginFailer(errorMessage));
-    toast.error(`Login failed: ${errorMessage}`);
+    toast.error(errorMessage);
   }
 };
 

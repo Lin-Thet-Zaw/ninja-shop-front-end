@@ -101,9 +101,6 @@ const CreateProductForm = () => {
       price,
       discountedPercent,
       quantity,
-      topLevelCategory,
-      secondLevelCategory,
-      thirdLevelCategory,
       description,
       size,
     } = productData;

@@ -3,6 +3,7 @@ import React from "react";
 import RegisterForm from "./RegisterForm";
 import { useLocation } from "react-router-dom";
 import LoginForm from "./LoginForm";
+import ForgetPassword from "./ForgetPassword";
 
 const AuthModal = ({ handleClose, open }) => {
   const location = useLocation();
@@ -29,7 +30,11 @@ const AuthModal = ({ handleClose, open }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          {location.pathname === "/login" ? <LoginForm /> : <RegisterForm />}
+          {location.pathname === "/forget-password" ? (
+            <ForgetPassword />
+          ): location.pathname === "/register" ?(
+            <RegisterForm />
+          ) :(< LoginForm/>)}
         </Box>
       </Modal>
     </div>

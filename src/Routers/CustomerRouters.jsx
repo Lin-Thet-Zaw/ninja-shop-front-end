@@ -10,6 +10,7 @@ import Checkout from '../customer/componenets/Checkout/Checkout';
 import OrderDetails from '../customer/componenets/Order/OrderDetails';
 import Cart from '../customer/componenets/Cart/Cart';
 import OrderTracker from '../customer/componenets/Order/OrderTracker';
+import ResetPassword from '../customer/auth/ResetPassword';
 
 const CustomerRouters = () => {
   return (
@@ -20,6 +21,8 @@ const CustomerRouters = () => {
       <Routes>
         <Route path='/login' element={<HomePage />} />
         <Route path='/register' element={<HomePage />} />
+        <Route path='/forget-password' element={<HomePage />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='*' element={<HomePage />} />
         <Route path='/order' element={<Order />} />
         <Route path='/cart' element={<Cart/> } />

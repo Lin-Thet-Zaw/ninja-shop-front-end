@@ -118,7 +118,7 @@ export const createProduct = (product) => async(dispatch)=>{
     dispatch({ type: CREATE_PRODUCT_FAILUAR, payload: error.message });
     
     // Display the error message in a toast
-    toast.error(`Error: ${errorMessage}`);
+    toast.error(errorMessage);
   }
 }
 
@@ -146,6 +146,6 @@ export const deleteProduct = (productId) => async(dispatch)=>{
       errorMessage = error.message;
     }
     dispatch({type: DELETE_PRODUCT_FAILUAR, payload:error.message})
-    toast.error(`Error: ${errorMessage}`)
+    toast.error(errorMessage)
   }
 }

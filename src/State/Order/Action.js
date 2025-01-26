@@ -80,7 +80,7 @@ export const getOrderById = (orderId) => async (dispatch) => {
     });
 
     // Display the error message in a toast
-    toast.error(`Error: ${errorMessage}`);
+    toast.error(errorMessage);
   }
 };
 
@@ -120,7 +120,7 @@ export const getOrderByTrackId = (trackId) => async (dispatch) => {
     });
 
     // Display the error message in a toast
-    toast.error(`Error: ${errorMessage}`);
+    toast.error(errorMessage);
   }
 };
 export const comfirmedOrder = (reqData) => async (dispatch) => {
