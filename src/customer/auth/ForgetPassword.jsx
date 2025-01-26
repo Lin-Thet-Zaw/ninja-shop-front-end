@@ -10,7 +10,6 @@ const ForgetPassword = () => {
   const isSmallScreen = useMediaQuery('(max-width:600px)'); // Detect small screens
   const { passwordReset } = useSelector(store => store);
   const isLoading = passwordReset?.isLoading; // Extract isLoading from passwordReset state
-  const message = passwordReset?.message;
 
   const handelSubmit = (event) => {
     event.preventDefault();
