@@ -39,11 +39,15 @@ const HomeSectionCard = ({ product }) => {
         {/* Product Price & Discount */}
         <div className="mt-3 flex justify-between items-center">
           <span className="text-xl font-semibold text-gray-900">
-            ${product.discountedPrice}
+            {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+              product.discountedPrice
+            )}
           </span>
           {product.discountedPercent > 0 && (
             <span className="text-sm text-gray-500 line-through">
-              ${product.price}
+              {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+                product.price
+              )}
             </span>
           )}
         </div>

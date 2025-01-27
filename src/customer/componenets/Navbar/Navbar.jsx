@@ -39,7 +39,6 @@ export default function Navigation() {
   const jwt = localStorage.getItem("jwt");
   const { auth, order } = useSelector((store) => store);
 
-  console.log("Naver", auth);
   const handelUserClick = (event) => {
     setAncherEl(event.currentTarget);
   };

@@ -18,7 +18,6 @@ const ForgetPassword = () => {
       email: data.get('email'),
     };
     dispatch(forgetPassword(userData)); // Dispatch forgetPassword action
-    console.log('User Data', userData);
   };
 
   return (

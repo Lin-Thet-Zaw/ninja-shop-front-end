@@ -38,10 +38,8 @@ export const findProducts = (reqData) => async (dispatch) => {
     const { data } = await api.get(
       `/api/products?category=${category}&color=${color}&size=${size}&minPrice=${minPrice}&maxPrice=${maxPrice}&minDiscounted=${minDiscounted}&stock=${stock}&sort=${sort}&pageNumber=${pageNumber}&pageSize=${pageSize}`
     );
-    console.log("Filter Product Data", data);
     dispatch({ type: FIND_PRODUCTS_SUCCESS, payload: data });
   } catch (error) {
-    console.error("Error fetching products:", error);
     dispatch({ type: FIND_PRODUCTS_FAILUER, payload: error.message });
   }
 };
@@ -51,7 +49,6 @@ export const findProductById = (reqData) => async (dispatch) => {
   const { productId } = reqData;
   try {
     const { data } = await api.get(`/api/products/id/${productId}`);
-    console.log("Find product by id", data);
     dispatch({ type: FIND_PRODUCT_BY_ID_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: FIND_PRODUCT_BY_ID_FAILUER, payload: error.message });
@@ -62,10 +59,8 @@ export const getAllProducts = () => async (dispatch) => {
   dispatch({ type: FIND_PRODUCTS_REQUEST });
   try {
     const { data } = await api.get("/api/products/all");
-    console.log("getAll products", data);
     dispatch({ type: FIND_PRODUCTS_SUCCESS, payload: data });
   } catch (error) {
-    console.error("Error fetching all products:", error);
     dispatch({ type: FIND_PRODUCTS_FAILUER, payload: error.message });
   }
 };
@@ -90,24 +85,20 @@ export const createProduct = (product) => async(dispatch)=>{
   
   dispatch({type: CREATE_PRODUCT_REQUEST});
   try{
-    console.log(`Create product red,${product.data}`)
     const {data} = await api.post(`/api/admin/products/`, product.data)
-    console.log("Create product data", data)
     dispatch({type: CREATE_PRODUCT_SUCCESS, payload:data})
     toast.success("Product Created Successfully")
 
   }catch(error) {
+    console.log(error)
     let errorMessage = "An unknown error occurred.";
+    if (error.response && error.response.data && error.response.data.errors) {
+      // Extract validation errors from the response
+      const validationErrors = error.response.data.errors.map(err => err.defaultMessage).join(", ");
+      errorMessage = validationErrors;
+    } else if (error.message) {
+      errorMessage = error.message;
 
-    if (error.response) {
-      console.log(error.response.data);
-    
-      // Check for the specific error message in the response
-      if (error.response.data.message === "Query did not return a unique result: 2 results were returned") {
-        errorMessage = "Duplicate data found. Please ensure the data is unique.";
-      } else {
-        errorMessage = error.response.data.message || "Server Error occurred during registration.";
-      }
     } else if (error.request) {
       errorMessage = "Network Error: Unable to connect to the server.";
     } else {
@@ -131,7 +122,6 @@ export const deleteProduct = (productId) => async(dispatch)=>{
   try{
     
     const {data} = await api.delete(`/api/admin/products/${productId}/delete`)
-    console.log(data)
     dispatch({type: DELETE_PRODUCT_SUCCESS, payload:productId})
     toast.success("Product deleted successfully")
 

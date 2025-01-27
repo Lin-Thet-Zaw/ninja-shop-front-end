@@ -10,8 +10,6 @@ export const forgetPassword = (userData) => async (dispatch) => {
       dispatch({ type: FORGET_PASSWORD_SUCCESS, payload: response.data });
       toast.success(response.data)
     } catch (error) {
-
-      console.log(error.status)
       dispatch({ type: FORGET_PASSWORD_FAILUER, payload: error.message });
           let errorMessage = "An unknown error occurred.";
 
@@ -32,12 +30,10 @@ export const forgetPassword = (userData) => async (dispatch) => {
 export const resetPassword = (userData) => async (dispatch) => {
     dispatch({type: RESET_PASSWORD_REQUEST})
     try{
-        console.log(userData)
         const response = await api.post(`/auth/reset-password`,userData)
         dispatch({type: RESET_PASSWORD_SUCCESS, payload: response.data})
         toast.success("Password reset successfully")
     }catch(error){
-        console.log(error)
         dispatch({type: RESET_PASSWORD_FAILUER, payload: error.message})
         let errorMessage = "An unknown error occurred.";
 

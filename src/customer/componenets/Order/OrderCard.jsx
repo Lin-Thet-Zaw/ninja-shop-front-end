@@ -31,7 +31,14 @@ const OrderCard = ({ order }) => {
       <Grid container spacing={2} sx={{ alignItems: "center" }}>
         {/* Product Image and Details */}
         <Grid item xs={12} md={6}>
-          <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, alignItems: "center", gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
             <AvatarGroup sx={{ flexWrap: "wrap" }}>
               {order.orderItemList.map((orderItem) => (
                 <Avatar key={orderItem.id} src={orderItem.product.imageUrl} />
@@ -44,12 +51,14 @@ const OrderCard = ({ order }) => {
                 ))}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                Size: {order.orderItemList.map((orderItem) => (
+                Size:{" "}
+                {order.orderItemList.map((orderItem) => (
                   <span key={orderItem.id}>{orderItem.size}</span>
                 ))}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                Color: {order.orderItemList.map((orderItem) => (
+                Color:{" "}
+                {order.orderItemList.map((orderItem) => (
                   <span key={orderItem.id}>{orderItem.product.color}</span>
                 ))}
               </Typography>
@@ -63,21 +72,26 @@ const OrderCard = ({ order }) => {
         {/* Price */}
         <Grid item xs={6} md={2}>
           <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-            ${order.totalPrice}
+            {new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(order.totalPrice)}
           </Typography>
         </Grid>
 
         {/* Delivery Status */}
         <Grid item xs={6} md={4}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <AdjustIcon sx={{ color: getStatusColor(order.orderStatus), fontSize: 16 }} />
-            <Typography variant="body1">
-              {order.orderStatus}
-            </Typography>
+            <AdjustIcon
+              sx={{ color: getStatusColor(order.orderStatus), fontSize: 16 }}
+            />
+            <Typography variant="body1">{order.orderStatus}</Typography>
           </Box>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             {order.orderStatus === "DELIVERED"
-              ? `Delivered on ${new Date(order.deliveryDate).toLocaleDateString()}`
+              ? `Delivered on ${new Date(
+                  order.deliveryDate
+                ).toLocaleDateString()}`
               : "Your item is on the way"}
           </Typography>
         </Grid>

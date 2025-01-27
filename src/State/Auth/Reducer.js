@@ -15,7 +15,7 @@ import {
     user: null,
     isLoading: false,
     error: null,
-    jwt: null,
+    jwt: localStorage.getItem("jwt") || null, // Initialize jwt from localStorage
   };
   
   export const authReducer = (state = initialState, action) => {

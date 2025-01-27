@@ -46,7 +46,7 @@ const Admin = () => {
   const location = useLocation();
   const { auth } = useSelector((store) => store);
   if (auth?.user?.role != "admin") {
-    toast.info("Your not admin")
+    // toast.info("Your not admin")
     navigate("/");
   }
 

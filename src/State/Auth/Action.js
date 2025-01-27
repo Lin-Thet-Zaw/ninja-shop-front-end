@@ -97,7 +97,6 @@ export const getUser = (jwt) => async (dispatch) => {
       },
     });
     const user = response.data;
-    console.log("user", user);
     dispatch(getUserSucces(user));
   } catch (error) {
     dispatch(getUserFailer(error.message));

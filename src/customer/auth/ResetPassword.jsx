@@ -25,7 +25,6 @@ const ResetPassword = () => {
       password,
     };
     dispatch(resetPassword(userData)); // Dispatch resetPassword action
-    console.log('User Data', userData);
   };
 
   return (

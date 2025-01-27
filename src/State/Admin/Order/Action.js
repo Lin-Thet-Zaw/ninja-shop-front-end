@@ -27,10 +27,9 @@ export const getOrders = () => {
     dispatch({ type: ADMIN_GET_ORDERS_SUCCESS });
     try {
       const response = await api.get(`/api/admin/orders/`);
-      console.log("Get all orders", response.data);
       dispatch({ type: ADMIN_GET_ORDERS_SUCCESS, payload: response.data });
     } catch (error) {
-      console.log("Catch error", error);
+      toast.error(error.message);
       dispatch({ type: ADMIN_GET_ORDERS_FAILUAR, payload: error.message });
     }
   };
@@ -41,13 +40,12 @@ export const comfirmedOrder = (orderId) => async (dispatch) => {
   setAuthHeader(jwt); // Add the Authorization header
   dispatch({ type: COMFIRMED_ORDER_REQUEST });
   try {
-    const response = await api.put(`/api/admin/orders/${orderId}/comfirmed`);
+    const response = await api.put(`/api/admin/orders/${orderId}/confirmed`);
     const data = response.data;
-    console.log("Comfirmed Order Data", data);
     dispatch({ type: COMFIREMD_ORDER_SUCCESS, payload: data });
     toast.success("Order Confirmed Successfully");
   } catch (error) {
-    console.log("Comfirmed Order Error", error);
+    toast.error(error.message);
     dispatch({ type: COMFIRMED_ORDER_FAILUER, payload: error.message });
   }
 };
@@ -59,11 +57,10 @@ export const shipOrder = (orderId) => async (dispatch) => {
   try {
     const response = await api.put(`/api/admin/orders/${orderId}/ship`);
     const data = response.data;
-    console.log("Shipped Order Data", data);
     dispatch({ type: SHIPED_ORDER_SUCCESS, payload: data });
     toast.success("Order Shipped Successfully");
   } catch (error) {
-    console.log("Shipped Order Error", error);
+    toast.error(error.message);
     dispatch({ type: SHIPED_ORDER_FAILUER, payload: error.message });
   }
 };
@@ -75,11 +72,10 @@ export const deliverOrder = (orderId) => async (dispatch) => {
   try {
     const response = await api.put(`/api/admin/orders/${orderId}/deliver`);
     const data = response.data;
-    console.log("Delivered Order Data", data);
     dispatch({ type: DELIVERED_ORDER_SUCCESS, payload: data });
     toast.success("Order Delivered Successfully");
   } catch (error) {
-    console.log("Delivered Order Error", error);
+    toast.error(error.message);
     dispatch({ type: DELIVERED_ORDER_FAILUER, payload: error.message });
   }
 };
@@ -91,12 +87,11 @@ export const cancelOrder = (orderId) => async (dispatch) => {
   try {
     const response = await api.put(`/api/admin/orders/${orderId}/cancel`);
     const data = response.data;
-    console.log("Cancelled Order Data", data);
     dispatch({ type: CANCELED_ORDER_SUCCESS, payload: data });
     toast.success("Order Cancelled Successfully");
   } catch (error) {
-    console.log("Cancelled Order Error", error);
     dispatch({ type: CANCELED_ORDER_FAILUER, payload: error.message });
+    toast.error(error.message);
   }
 };
 
@@ -109,7 +104,7 @@ export const deleteOrder = (orderId) => async (dispatch) => {
     dispatch({ type: DELETED_ORDER_SUCCESS, payload: data });
     toast.success("Order Deleted Successfully");
   } catch (error) {
-    console.log("Deleted Order Error", error);
     dispatch({ type: DELETED_ORDER_FAILUER, payload: error.message });
+    toast.error(error.message);
   }
 };

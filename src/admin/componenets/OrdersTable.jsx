@@ -32,9 +32,8 @@ const OrdersTable = () => {
   const { adminOrder, auth } = useSelector((store) => store);
   const  navigate = useNavigate();
 
-  console.log("Admin orders", auth)
   if(auth?.user?.role != "admin"){
-  toast.info("You are not admin")
+  // toast.info("You are not admin")
   navigate("/")
   }
 

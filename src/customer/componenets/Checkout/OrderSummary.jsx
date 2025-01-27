@@ -75,12 +75,22 @@ const OrderSummary = () => {
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Price</Typography>
-                <Typography>${order.order?.totalPrice}</Typography>
+                <Typography>
+                  {" "}
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(order.order?.totalPrice)}
+                </Typography>
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Discount</Typography>
                 <Typography sx={{ color: "green" }}>
-                  -${order.order?.discounted}
+                  -{" "}
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(order.order?.discounted)}
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -97,7 +107,11 @@ const OrderSummary = () => {
               >
                 <Typography>Total Amount</Typography>
                 <Typography sx={{ color: "green" }}>
-                  ${order.order?.totalDiscountPrice}
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(order.order?.totalDiscountPrice)}
+                  {}
                 </Typography>
               </Box>
             </Box>

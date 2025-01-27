@@ -10,10 +10,8 @@ const ProductsTable = () => {
   const {products, auth} = useSelector(store=>store)
   const navigate = useNavigate();
 
-  console.log("Admin products", products)
-  console.log("Admin Products", auth)
   if(auth?.user?.role !="admin"){
-    toast.info("You are not admin")
+    // toast.info("You are not admin")
     navigate("/")
   }
 
@@ -22,7 +20,6 @@ const ProductsTable = () => {
     navigate("/")
   }
 
-  console.log("Filter Data:", products);
   useEffect(() => {
       // const data = {
       //   category: "Baby Sleep",

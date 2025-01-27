@@ -11,30 +11,29 @@ import {
   MenuItem,
   Select,
   Button,
+  IconButton,
+  CircularProgress,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 const CreateProductForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const jwt = localStorage.getItem("jwt");
-  const {auth} = useSelector((store)=>store)
+  const { auth } = useSelector((store) => store);
+  const jwt = auth?.jwt;
+  const getStorateJwt = localStorage.getItem("jwt");
+  const loading = useSelector(store => store.products.loading);
 
-  console.log("Admin create product page", auth)
-  if (auth?.user === null) {
-    // toast.info("Plase login");
+  // Redirect if user is not logged in or not an admin
+  // if (auth?.user === null || auth?.user?.role !== "admin") {
+  //   navigate("/");
+  // }
+
+  if (getStorateJwt === null) {
     navigate("/");
   }
-  if (auth?.user?.role != "admin") {
-    toast.info("Your not admin")
-    navigate("/");
-  }
-
-  const initialSize = [
-    { name: "L", quantity: 0 },
-    { name: "M", quantity: 0 },
-    { name: "S", quantity: 0 },
-  ];
 
   // Default category data
   const defaultCategories = {
@@ -43,6 +42,7 @@ const CreateProductForm = () => {
     thirdLevelCategories: ["Tops", "Trending", "Best Sales"],
   };
 
+  // State for product data
   const [productData, setProductData] = useState({
     image: "",
     brand: "",
@@ -51,28 +51,131 @@ const CreateProductForm = () => {
     discountedPrice: "",
     price: "",
     discountedPercent: "",
-    size: initialSize,
+    size: [{ name: "", quantity: 0 }], // Initialize with one size field
     quantity: "",
-    topLevelCategory: "",
-    secondLevelCategory: "",
-    thirdLevelCategory: "",
+    topLevelCategory: "Woman",
+    secondLevelCategory: "Clothing",
+    thirdLevelCategory: "Best Sales",
     description: "",
   });
 
+  // State for custom categories
   const [customCategories, setCustomCategories] = useState({
     topLevelCategory: "",
     secondLevelCategory: "",
     thirdLevelCategory: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProductData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  // State for validation errors
+  const [errors, setErrors] = useState({});
+
+  // Validation functions
+  const validateDescription = (description) => {
+    return description.length >= 1 && description.length <= 200;
   };
 
+  const validatePrice = (price) => {
+    return price > 0;
+  };
+
+  const validateDiscountedPrice = (discountedPrice) => {
+    return discountedPrice > 0;
+  };
+
+  const validateDiscountedPercent = (discountedPercent) => {
+    return discountedPercent >= 0 && discountedPercent <= 100;
+  };
+
+  const validateQuantity = (quantity) => {
+    return quantity >= 1;
+  };
+
+  const validateBrand = (brand) => {
+    return brand.length >= 1 && brand.length <= 50;
+  };
+
+  const validateTitle = (title) => {
+    return title.length >= 1 && title.length <= 50;
+  };
+
+  const validateColor = (color) => {
+    return color.length >= 1 && color.length <= 50;
+  };
+
+  const validateSizes = (sizes) => {
+    return (
+      sizes.length > 0 && sizes.every((size) => size.name && size.quantity > 0)
+    );
+  };
+
+  const validateImageUrl = (imageUrl) => {
+    return imageUrl.length > 0;
+  };
+
+  const validateCategory = (category) => {
+    return category.length >= 1 && category.length <= 50;
+  };
+
+  // Handle changes in input fields
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    let isValid = true;
+
+    switch (name) {
+      case "description":
+        isValid = validateDescription(value);
+        break;
+      case "price":
+        isValid = validatePrice(value);
+        break;
+      case "discountedPrice":
+        isValid = validateDiscountedPrice(value);
+        break;
+      case "discountedPercent":
+        isValid = validateDiscountedPercent(value);
+        break;
+      case "quantity":
+        isValid = validateQuantity(value);
+        break;
+      case "brand":
+        isValid = validateBrand(value);
+        break;
+      case "color":
+        isValid = validateColor(value);
+        break;
+      case "title":
+        isValid = validateTitle(value);
+        break;
+      case "image":
+        isValid = validateImageUrl(value);
+        break;
+      case "topLevelCategory":
+      case "secondLevelCategory":
+      case "thirdLevelCategory":
+        isValid = validateCategory(value);
+        break;
+      default:
+        break;
+    }
+
+    if (isValid) {
+      setProductData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: null,
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: `Invalid input for ${name}`,
+      }));
+    }
+  };
+
+  // Handle changes in custom category fields
   const handleCustomCategoryChange = (e) => {
     const { name, value } = e.target;
     setCustomCategories((prevState) => ({
@@ -81,6 +184,7 @@ const CreateProductForm = () => {
     }));
   };
 
+  // Handle changes in size fields
   const handleSizeChange = (e, index) => {
     const { name, value } = e.target;
     const sizes = [...productData.size];
@@ -91,6 +195,25 @@ const CreateProductForm = () => {
     }));
   };
 
+  // Add a new size field
+  const addSizeField = () => {
+    setProductData((prevState) => ({
+      ...prevState,
+      size: [...prevState.size, { name: "", quantity: 0 }],
+    }));
+  };
+
+  // Remove a size field
+  const removeSizeField = (index) => {
+    const sizes = [...productData.size];
+    sizes.splice(index, 1);
+    setProductData((prevState) => ({
+      ...prevState,
+      size: sizes,
+    }));
+  };
+
+  // Validate the form
   const isFormValid = () => {
     const {
       image,
@@ -103,56 +226,65 @@ const CreateProductForm = () => {
       quantity,
       description,
       size,
+      topLevelCategory,
+      secondLevelCategory,
+      thirdLevelCategory,
     } = productData;
 
-    // Check if required fields are filled
-    if (
-      !image ||
-      !brand ||
-      !title ||
-      !color ||
-      !discountedPrice ||
-      !price ||
-      !discountedPercent ||
-      !quantity ||
-      !description
-    ) {
-      return false;
-    }
-
-    // Check if all sizes have valid values
-    const isSizeValid = size.every((size) => size.name.trim() !== "");
-
-    return isSizeValid;
+    return (
+      validateDescription(description) &&
+      validatePrice(price) &&
+      validateDiscountedPrice(discountedPrice) &&
+      validateDiscountedPercent(discountedPercent) &&
+      validateQuantity(quantity) &&
+      validateBrand(brand) &&
+      validateColor(color) &&
+      validateTitle(title) &&
+      validateSizes(size) &&
+      validateImageUrl(image) &&
+      validateCategory(topLevelCategory) &&
+      validateCategory(secondLevelCategory) &&
+      validateCategory(thirdLevelCategory)
+    );
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Use custom categories if provided, otherwise use default categories
-    const finalTopLevelCategory =
-      customCategories.topLevelCategory || productData.topLevelCategory;
-    const finalSecondLevelCategory =
-      customCategories.secondLevelCategory || productData.secondLevelCategory;
-    const finalThirdLevelCategory =
-      customCategories.thirdLevelCategory || productData.thirdLevelCategory;
+    if (isFormValid()) {
+      const finalTopLevelCategory =
+        customCategories.topLevelCategory || productData.topLevelCategory;
+      const finalSecondLevelCategory =
+        customCategories.secondLevelCategory || productData.secondLevelCategory;
+      const finalThirdLevelCategory =
+        customCategories.thirdLevelCategory || productData.thirdLevelCategory;
 
-    const formData = new FormData();
-    formData.append("image", productData.image);
-    formData.append("brand", productData.brand);
-    formData.append("title", productData.title);
-    formData.append("color", productData.color);
-    formData.append("discountedPrice", productData.discountedPrice);
-    formData.append("price", productData.price);
-    formData.append("discountedPercent", productData.discountedPercent);
-    formData.append("quantity", productData.quantity);
-    formData.append("topLevelCategory", finalTopLevelCategory);
-    formData.append("secondLevelCategory", finalSecondLevelCategory);
-    formData.append("thirdLevelCategory", finalThirdLevelCategory);
-    formData.append("description", productData.description);
-    formData.append("sizes", JSON.stringify(productData.size));
+      const formData = new FormData();
+      formData.append("image", productData.image);
+      formData.append("brand", productData.brand);
+      formData.append("title", productData.title);
+      formData.append("color", productData.color);
+      formData.append(
+        "discountedPrice",
+        parseFloat(productData.discountedPrice)
+      );
+      formData.append("price", parseFloat(productData.price));
+      formData.append(
+        "discountedPercent",
+        parseInt(productData.discountedPercent, 10)
+      );
+      formData.append("quantity", parseInt(productData.quantity, 10));
+      formData.append("topLevelCategory", finalTopLevelCategory);
+      formData.append("secondLevelCategory", finalSecondLevelCategory);
+      formData.append("thirdLevelCategory", finalThirdLevelCategory);
+      formData.append("description", productData.description);
+      formData.append("sizes", JSON.stringify(productData.size));
 
-    dispatch(createProduct({ data: formData, jwt }));
+      dispatch(createProduct({ data: formData, jwt }));
+    } else {
+      toast.error("Please correct the errors in the form before submitting.");
+    }
   };
 
   return (
@@ -163,6 +295,7 @@ const CreateProductForm = () => {
         </Typography>
         <form onSubmit={handleSubmit} className="min-h-screen">
           <Grid container spacing={2}>
+            {/* Image URL */}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -171,8 +304,12 @@ const CreateProductForm = () => {
                 value={productData.image}
                 onChange={handleChange}
                 required
+                error={!!errors.image}
+                helperText={errors.image}
               />
             </Grid>
+
+            {/* Brand */}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -181,8 +318,12 @@ const CreateProductForm = () => {
                 value={productData.brand}
                 onChange={handleChange}
                 required
+                error={!!errors.brand}
+                helperText={errors.brand}
               />
             </Grid>
+
+            {/* Title */}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -190,9 +331,13 @@ const CreateProductForm = () => {
                 name="title"
                 value={productData.title}
                 onChange={handleChange}
+                error={!!errors.title}
+                helperText={errors.title}
                 required
               />
             </Grid>
+
+            {/* Color */}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -201,8 +346,12 @@ const CreateProductForm = () => {
                 value={productData.color}
                 onChange={handleChange}
                 required
+                error={!!errors.color}
+                helperText={errors.color}
               />
             </Grid>
+
+            {/* Quantity */}
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
@@ -212,8 +361,12 @@ const CreateProductForm = () => {
                 onChange={handleChange}
                 type="number"
                 required
+                error={!!errors.quantity}
+                helperText={errors.quantity}
               />
             </Grid>
+
+            {/* Price */}
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
@@ -223,8 +376,13 @@ const CreateProductForm = () => {
                 onChange={handleChange}
                 type="number"
                 required
+                InputProps={{ step: "0.1" }}
+                error={!!errors.price}
+                helperText={errors.price}
               />
             </Grid>
+
+            {/* Discounted Price */}
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
@@ -233,9 +391,14 @@ const CreateProductForm = () => {
                 value={productData.discountedPrice}
                 onChange={handleChange}
                 type="number"
+                InputProps={{ step: "0.1" }}
                 required
+                error={!!errors.discountedPrice}
+                helperText={errors.discountedPrice}
               />
             </Grid>
+
+            {/* Discounted Percentage */}
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
@@ -245,6 +408,8 @@ const CreateProductForm = () => {
                 onChange={handleChange}
                 type="number"
                 required
+                error={!!errors.discountedPercent}
+                helperText={errors.discountedPercent}
               />
             </Grid>
 
@@ -256,6 +421,8 @@ const CreateProductForm = () => {
                 name="topLevelCategory"
                 value={customCategories.topLevelCategory}
                 onChange={handleCustomCategoryChange}
+                error={!!errors.topLevelCategory}
+                helperText={errors.topLevelCategory}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -265,6 +432,8 @@ const CreateProductForm = () => {
                 name="secondLevelCategory"
                 value={customCategories.secondLevelCategory}
                 onChange={handleCustomCategoryChange}
+                error={!!errors.secondLevelCategory}
+                helperText={errors.secondLevelCategory}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -274,6 +443,8 @@ const CreateProductForm = () => {
                 name="thirdLevelCategory"
                 value={customCategories.thirdLevelCategory}
                 onChange={handleCustomCategoryChange}
+                error={!!errors.thirdLevelCategory}
+                helperText={errors.thirdLevelCategory}
               />
             </Grid>
 
@@ -286,13 +457,14 @@ const CreateProductForm = () => {
                   value={productData.topLevelCategory}
                   onChange={handleChange}
                   label="Top Level Category"
-                  required
                 >
-                  {defaultCategories.topLevelCategories.map((category, index) => (
-                    <MenuItem key={index} value={category}>
-                      {category}
-                    </MenuItem>
-                  ))}
+                  {defaultCategories.topLevelCategories.map(
+                    (category, index) => (
+                      <MenuItem key={index} value={category}>
+                        {category}
+                      </MenuItem>
+                    )
+                  )}
                 </Select>
               </FormControl>
             </Grid>
@@ -304,13 +476,14 @@ const CreateProductForm = () => {
                   value={productData.secondLevelCategory}
                   onChange={handleChange}
                   label="Second Level Category"
-                  required
                 >
-                  {defaultCategories.secondLevelCategories.map((category, index) => (
-                    <MenuItem key={index} value={category}>
-                      {category}
-                    </MenuItem>
-                  ))}
+                  {defaultCategories.secondLevelCategories.map(
+                    (category, index) => (
+                      <MenuItem key={index} value={category}>
+                        {category}
+                      </MenuItem>
+                    )
+                  )}
                 </Select>
               </FormControl>
             </Grid>
@@ -322,17 +495,19 @@ const CreateProductForm = () => {
                   value={productData.thirdLevelCategory}
                   onChange={handleChange}
                   label="Third Level Category"
-                  required
                 >
-                  {defaultCategories.thirdLevelCategories.map((category, index) => (
-                    <MenuItem key={index} value={category}>
-                      {category}
-                    </MenuItem>
-                  ))}
+                  {defaultCategories.thirdLevelCategories.map(
+                    (category, index) => (
+                      <MenuItem key={index} value={category}>
+                        {category}
+                      </MenuItem>
+                    )
+                  )}
                 </Select>
               </FormControl>
             </Grid>
 
+            {/* Description */}
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -341,36 +516,60 @@ const CreateProductForm = () => {
                 value={productData.description}
                 onChange={handleChange}
                 multiline
-                rows={3}
                 required
+                rows={3}
+                error={!!errors.description}
+                helperText={errors.description}
               />
             </Grid>
 
+            {/* Dynamic Size Inputs */}
             {productData.size.map((size, index) => (
               <Grid container item spacing={3} key={index}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={5}>
                   <TextField
                     label="Size"
                     name="size"
                     value={size.name}
                     onChange={(event) => handleSizeChange(event, index)}
-                    required
                     fullWidth
+                    required
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={5}>
                   <TextField
                     label="Quantity"
                     name="size_quantity"
                     type="number"
                     value={size.quantity}
                     onChange={(event) => handleSizeChange(event, index)}
-                    required
                     fullWidth
+                    required
                   />
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                  <IconButton
+                    onClick={() => removeSizeField(index)}
+                    disabled={productData.size.length === 1}
+                  >
+                    <RemoveCircleOutlineIcon />
+                  </IconButton>
                 </Grid>
               </Grid>
             ))}
+
+            {/* Add New Size Button */}
+            <Grid item xs={12}>
+              <Button
+                variant="outlined"
+                startIcon={<AddCircleOutlineIcon />}
+                onClick={addSizeField}
+              >
+                Add Size
+              </Button>
+            </Grid>
+
+            {/* Submit Button */}
             <Grid item xs={12}>
               <Button
                 variant="contained"
@@ -379,9 +578,20 @@ const CreateProductForm = () => {
                 size="large"
                 type="submit"
                 fullWidth
-                disabled={!isFormValid()} // Disable button if form is invalid
+                disabled={!isFormValid()}
               >
-                Add New Product
+                {loading ? (
+                  <>
+                    <CircularProgress
+                      size={24}
+                      color="inherit"
+                      sx={{ marginRight: 2 }}
+                    />
+                    Uploading...
+                  </>
+                ) : (
+                  "Add New Product"
+                )}
               </Button>
             </Grid>
           </Grid>

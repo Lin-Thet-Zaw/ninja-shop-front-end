@@ -5,8 +5,6 @@ export const fetchFilters = () => async (dispatch) => {
   dispatch({ type: FETCH_FILTERS_REQUEST });
   try {
     const { data } = await api.get("/api/products/all"); // API to fetch filters
-    console.log("API Response", data); // Log raw data to check its structure
-
     // Check if the data is an array before proceeding
     if (!Array.isArray(data)) {
       throw new Error("API response is not an array");
@@ -15,7 +13,6 @@ export const fetchFilters = () => async (dispatch) => {
     const filters = formatFilters(data); // Format filters for frontend
     dispatch({ type: FETCH_FILTERS_SUCCESS, payload: filters });
   } catch (error) {
-    console.error("Error fetching filters:", error.response || error.message); // More detailed error logging
     dispatch({ type: FETCH_FILTERS_FAILURE, payload: error.message });
   }
 };

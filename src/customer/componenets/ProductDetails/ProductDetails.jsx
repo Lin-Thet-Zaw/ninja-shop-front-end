@@ -31,8 +31,7 @@ export default function ProductDetails() {
   const { products } = useSelector((store) => store);
 
   const handleAddToCart = () => {
-    const data = { productId: params.productId, size: selectedSize.name };
-    console.log("handleAddToCart data", data);
+    const data = { productId: params.productId, size: selectedSize?.name || null };
     dispatch(addItemToCart(data));
     navigate("/cart/");
   };
@@ -41,6 +40,9 @@ export default function ProductDetails() {
     const data = { productId: params.productId };
     dispatch(findProductById(data));
   }, [params.productId]);
+
+  // Check if sizes are available
+  const hasSizes = products.product?.sizes && products.product.sizes.length > 0;
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -91,20 +93,28 @@ export default function ProductDetails() {
             {/* Price and Discount */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                ${products.product?.price}
+                {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+                  products.product?.discountedPrice
+                )}
               </Typography>
-              <Typography
-                variant="body1"
-                sx={{ opacity: 0.6, textDecoration: "line-through" }}
-              >
-                ${products.product?.discountedPrice}
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ color: "green", fontWeight: "bold" }}
-              >
-                {products.product?.discountedPercent}% off
-              </Typography>
+              {products.product?.discountedPercent > 0 && (
+                <Typography
+                  variant="body1"
+                  sx={{ opacity: 0.6, textDecoration: "line-through" }}
+                >
+                  {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+                    products.product?.price
+                  )}
+                </Typography>
+              )}
+              {products.product?.discountedPercent > 0 && (
+                <Typography
+                  variant="body1"
+                  sx={{ color: "green", fontWeight: "bold" }}
+                >
+                  {products.product?.discountedPercent}% off
+                </Typography>
+              )}
             </Box>
 
             {/* Reviews */}
@@ -118,43 +128,45 @@ export default function ProductDetails() {
               </Typography>
             </Box>
 
-            {/* Size Selection */}
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-                Size
-              </Typography>
-              <RadioGroup value={selectedSize} onChange={setSelectedSize}>
-                <Grid container spacing={2}>
-                  {products.product?.sizes.map((size) => (
-                    <Grid item key={size.name}>
-                      <Radio value={size}>
-                        {({ checked }) => (
-                          <Box
-                            sx={{
-                              padding: 2,
-                              border: checked
-                                ? "2px solid #9155fd"
-                                : "1px solid #e0e0e0",
-                              borderRadius: 1,
-                              cursor: "pointer",
-                              backgroundColor: checked ? "#f3e8ff" : "white",
-                            }}
-                          >
-                            <Typography>{size.name}</Typography>
-                          </Box>
-                        )}
-                      </Radio>
-                    </Grid>
-                  ))}
-                </Grid>
-              </RadioGroup>
-            </Box>
+            {/* Size Selection (Only show if sizes are available) */}
+            {hasSizes && (
+              <Box sx={{ mb: 4 }}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                  Size
+                </Typography>
+                <RadioGroup value={selectedSize} onChange={setSelectedSize}>
+                  <Grid container spacing={2}>
+                    {products.product.sizes.map((size) => (
+                      <Grid item key={size.name}>
+                        <Radio value={size}>
+                          {({ checked }) => (
+                            <Box
+                              sx={{
+                                padding: 2,
+                                border: checked
+                                  ? "2px solid #9155fd"
+                                  : "1px solid #e0e0e0",
+                                borderRadius: 1,
+                                cursor: "pointer",
+                                backgroundColor: checked ? "#f3e8ff" : "white",
+                              }}
+                            >
+                              <Typography>{size.name}</Typography>
+                            </Box>
+                          )}
+                        </Radio>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </RadioGroup>
+              </Box>
+            )}
 
-            {/* Add to Cart Button */}
+            {/* Add to Cart Button (Always enabled if no sizes are required) */}
             <Button
               onClick={handleAddToCart}
               variant="contained"
-              disabled={!selectedSize}
+              disabled={hasSizes && !selectedSize} // Disable only if sizes are required and no size is selected
               sx={{
                 width: "100%",
                 py: 1.5,
@@ -177,7 +189,7 @@ export default function ProductDetails() {
           </Box>
         </Box>
       </Box>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

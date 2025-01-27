@@ -8,16 +8,16 @@ const OrderTracker = () => {
   const { order } = useSelector((store) => store); // Access order from Redux store
   const [activeStep, setActiveStep] = useState(0); // Track active step in stepper
   const [inputOrderTrackId, setInputOrderTrackId] = useState(""); // Track user input for orderId
-
-  // Define order statuses
-  const orderStatus = [
+  
+  // Use React.useMemo for the orderStatus array to avoid recreating it on every render.
+  const orderStatus = React.useMemo(() => [
     { label: "Cancelled", value: "CANCELLED" },
     { label: "Pending", value: "PENDING" },
     { label: "Placed", value: "PLACED" },
     { label: "Confirmed", value: "CONFIRMED" },
     { label: "Shipped", value: "SHIPPED" },
     { label: "Delivered", value: "DELIVERED" },
-  ];
+  ], []);
 
   // Fetch order details when inputOrderId changes
   useEffect(() => {
@@ -76,6 +76,7 @@ const OrderTracker = () => {
             type="submit"
             variant="contained"
             color="primary"
+            disabled={!inputOrderTrackId}
             sx={{ width: { xs: "100%", sm: "auto" } }} // Make button full-width on small screens
           >
             Track Order

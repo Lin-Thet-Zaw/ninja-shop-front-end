@@ -46,7 +46,6 @@ const DelivaryAddress = () => {
 
     const orderData = { address: formData, navigate };
     dispatch(createOrder(orderData));
-    console.log("address", formData);
   };
 
   return (

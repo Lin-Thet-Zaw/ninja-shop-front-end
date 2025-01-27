@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
 
-const steps = ["Login", "Delivery Address", "Order Summary", "Confirmed"];
+const steps = ["Login", "Delivery Address", "Order Summary"];
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);

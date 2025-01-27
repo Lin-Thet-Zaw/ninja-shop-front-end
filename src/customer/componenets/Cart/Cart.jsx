@@ -18,7 +18,7 @@ const Cart = () => {
   };
 
   if (auth?.user === null) {
-    toast.info("Please login");
+    // toast.info("Please login");
     navigate("/");
   }
 
@@ -81,12 +81,16 @@ const Cart = () => {
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography>Price</Typography>
-                  <Typography>${cart.cart?.totalPrice}</Typography>
+                  <Typography>{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+                    cart.cart?.totalPrice
+                  )}</Typography>
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography>Discount</Typography>
                   <Typography sx={{ color: "green" }}>
-                    -${cart.cart?.discounted}
+                    -{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+                    cart.cart?.discounted
+                  )}
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -103,7 +107,9 @@ const Cart = () => {
                 >
                   <Typography>Total Amount</Typography>
                   <Typography sx={{ color: "green" }}>
-                    ${cart.cart?.totalDiscountedPrice}
+                  {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+                   cart.cart?.totalDiscountedPrice
+                  )}
                   </Typography>
                 </Box>
               </Box>

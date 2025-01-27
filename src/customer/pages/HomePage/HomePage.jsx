@@ -16,8 +16,6 @@ function HomePage() {
     dispatch(getAllProducts()); // Fetch all products on component mount
   }, [dispatch]);
 
-  console.log("Home Categories", products);
-
   // Group products by category (Check if products is an array)
   const groupedCategories = Array.isArray(products)
     ? products.reduce((acc, product) => {
