@@ -1,17 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import { StarIcon } from "@heroicons/react/20/solid";
 import { Radio, RadioGroup } from "@headlessui/react";
 import {
   Rating,
   Button,
   Grid,
   Box,
-  LinearProgress,
   Typography,
 } from "@mui/material";
-import ProductReviewCard from "./ProductReviewCard";
-import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { findProductById } from "../../../State/Product/Action";

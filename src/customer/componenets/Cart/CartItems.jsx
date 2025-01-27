@@ -53,11 +53,7 @@ const CartItems = ({ item }) => {
               }).format(item.discountedPrice)}
             </p>
             <p className="text-green-700 font-semibold">
-              {" "}
-              {new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-              }).format(product.discountedPrice)}% off
+            {product.discountedPercent}% off
             </p>
           </div>
         </div>

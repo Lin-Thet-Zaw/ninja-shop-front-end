@@ -9,14 +9,14 @@ import { useNavigate } from 'react-router-dom'
 const Dashboard = () => {
 const {auth} = useSelector((store)=>store)
 const navigate = useNavigate();
-  if (auth?.user === null) {
-    // toast.info("Plase login");
-    navigate("/");
-  }
-  if (auth?.user?.role != "admin") {
-    // toast.info("Your not admin")
-    navigate("/");
-  }
+  // if (auth?.user === null) {
+  //   // toast.info("Plase login");
+  //   navigate("/");
+  // }
+  // if (auth?.user?.role != "admin") {
+  //   // toast.info("Your not admin")
+  //   navigate("/");
+  // }
 
   return (
     <div>

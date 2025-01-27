@@ -15,7 +15,6 @@ import {
 import React, { useState } from "react";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import AddIcon from "@mui/icons-material/Add";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -25,10 +24,8 @@ import Dashboard from "./componenets/Dashboard";
 import CreateProductForm from "./componenets/CreateProductForm";
 import ProductsTable from "./componenets/ProductsTable";
 import OrdersTable from "./componenets/OrdersTable";
-import CustomersTable from "./componenets/CustomersTable";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../State/Auth/Action";
-import { toast } from "react-toastify";
 
 const menu = [
   { name: "Home", path: "/", icon: <HomeIcon /> },

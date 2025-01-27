@@ -31,6 +31,7 @@ const CreateProductForm = () => {
   //   navigate("/");
   // }
 
+  
   if (getStorateJwt === null) {
     navigate("/");
   }
@@ -71,7 +72,7 @@ const CreateProductForm = () => {
 
   // Validation functions
   const validateDescription = (description) => {
-    return description.length >= 1 && description.length <= 200;
+    return description.length >= 1 && description.length <= 500;
   };
 
   const validatePrice = (price) => {
@@ -91,15 +92,15 @@ const CreateProductForm = () => {
   };
 
   const validateBrand = (brand) => {
-    return brand.length >= 1 && brand.length <= 50;
+    return brand.length >= 1 && brand.length <= 100;
   };
 
   const validateTitle = (title) => {
-    return title.length >= 1 && title.length <= 50;
+    return title.length >= 1 && title.length <= 200;
   };
 
   const validateColor = (color) => {
-    return color.length >= 1 && color.length <= 50;
+    return color.length >= 1 && color.length <= 100;
   };
 
   const validateSizes = (sizes) => {
@@ -113,7 +114,7 @@ const CreateProductForm = () => {
   };
 
   const validateCategory = (category) => {
-    return category.length >= 1 && category.length <= 50;
+    return category.length >= 1 && category.length <= 100;
   };
 
   // Handle changes in input fields

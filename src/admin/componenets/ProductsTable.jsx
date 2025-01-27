@@ -1,24 +1,28 @@
 import { Avatar, Button, Card, CardHeader, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteProduct, findProducts, getAllProducts } from '../../State/Product/Action';
+import { deleteProduct,getAllProducts } from '../../State/Product/Action';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 const ProductsTable = () => {
   const dispatch = useDispatch();
-  const {products, auth} = useSelector(store=>store)
+  const {products} = useSelector(store=>store)
   const navigate = useNavigate();
 
-  if(auth?.user?.role !="admin"){
-    // toast.info("You are not admin")
-    navigate("/")
+  const getStorateJwt = localStorage.getItem("jwt");
+  if (getStorateJwt === null) {
+    navigate("/");
   }
+  
+  // if(auth?.user?.role !="admin"){
+  //   // toast.info("You are not admin")
+  //   navigate("/")
+  // }
 
-  if(auth?.user === null) {
-    // toast.info("Please login")
-    navigate("/")
-  }
+  // if(auth?.user === null) {
+  //   // toast.info("Please login")
+  //   navigate("/")
+  // }
 
   useEffect(() => {
       // const data = {
