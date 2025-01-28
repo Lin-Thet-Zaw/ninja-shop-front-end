@@ -6,7 +6,6 @@ export const forgetPassword = (userData) => async (dispatch) => {
     dispatch({ type: FORGET_PASSWORD_REQUEST });
     try {
       const response = await api.post(`/auth/forget-password`, userData);
-      console.log(response)
       dispatch({ type: FORGET_PASSWORD_SUCCESS, payload: response.data });
       toast.success(response.data)
     } catch (error) {

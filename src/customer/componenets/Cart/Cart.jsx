@@ -11,14 +11,16 @@ import Footer from "../HomeSectionCarousel/Footer/Footer";
 const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { auth, cart } = useSelector((store) => store);
-
+  const {cart } = useSelector((store) => store);
+  const jwt = localStorage.getItem("jwt")
+  
   const handleCheckout = () => {
     navigate("/checkout?step=1");
   };
 
-  if (auth?.user === null) {
-    // toast.info("Please login");
+
+  if (jwt === null) {
+    toast.info("Plase login");
     navigate("/");
   }
 
