@@ -25,25 +25,32 @@ import {
   TableRow,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../../State/Auth/Action";
+import { toast } from "react-toastify";
 
 const OrdersTable = () => {
   const dispatch = useDispatch();
   const { adminOrder} = useSelector((store) => store);
   const  navigate = useNavigate();
-  const getStorateJwt = localStorage.getItem("jwt");
-  if (getStorateJwt === null) {
-    navigate("/");
-  }
-  // if(auth?.user?.role != "admin"){
-  // // toast.info("You are not admin")
-  // navigate("/")
-  // }
+  const jwt = localStorage.getItem("jwt");
+  const { auth} = useSelector((store) => store);
 
-  // if(auth?.user === null){
-  //   // toast.info("Please login")
-  //   navigate("/")
-  // }
+  // Fetch user data using JWT
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getUser(jwt)); // Dispatch action to get user data
+    } else{
+      navigate("/")
+    }
+  }, [jwt, dispatch]);
 
+  // Redirect if auth is invalid or user is not admin
+  useEffect(() => {
+    if (!auth || auth?.user?.role !== "admin") {
+      navigate("/"); // Redirect to home if user is not admin
+    }
+  }, [auth,navigate]);
+  
   const [anchorElMap, setAnchorElMap] = React.useState({});
 
   const handleClick = (event, orderId) => {

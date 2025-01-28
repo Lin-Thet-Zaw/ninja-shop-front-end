@@ -20,11 +20,10 @@ export default function Checkout() {
   const navigate = useNavigate();
   const jwt = localStorage.getItem("jwt")
 
-  if (auth?.user === null || jwt === null) {
+  if (jwt === null) {
     toast.info("Plase login");
     navigate("/");
   }
-
 
   useEffect(() => {
     const querySearch = new URLSearchParams(location.search);

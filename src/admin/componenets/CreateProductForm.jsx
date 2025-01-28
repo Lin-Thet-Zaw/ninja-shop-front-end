@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createProduct } from "../../State/Product/Action";
@@ -17,26 +17,32 @@ import {
 import { toast } from "react-toastify";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { getUser } from "../../State/Auth/Action";
 
 const CreateProductForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { auth } = useSelector((store) => store);
-  const jwt = auth?.jwt;
-  const getStorateJwt = localStorage.getItem("jwt");
   const loading = useSelector(store => store.products.loading);
+  const jwt = localStorage.getItem("jwt");
+  const { auth} = useSelector((store) => store);
 
-  // Redirect if user is not logged in or not an admin
-  // if (auth?.user === null || auth?.user?.role !== "admin") {
-  //   navigate("/");
-  // }
+  // Fetch user data using JWT
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getUser(jwt)); // Dispatch action to get user data
+    } else{
+      navigate("/")
+    }
+  }, [jwt, dispatch]);
 
-  
-  if (getStorateJwt === null) {
-    navigate("/");
-  }
+  // Redirect if auth is invalid or user is not admin
+  useEffect(() => {
+    if (!auth || auth?.user?.role !== "admin") {
+      navigate("/"); // Redirect to home if user is not admin
+    }
+  }, [auth,navigate]);
 
-  // Default category data
+  // Default category dat
   const defaultCategories = {
     topLevelCategories: ["Woman", "Man", "Kids"],
     secondLevelCategories: ["Clothing", "Accessories", "Brands"],

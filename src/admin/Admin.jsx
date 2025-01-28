@@ -12,7 +12,7 @@ import {
   IconButton,
   Toolbar,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
@@ -25,7 +25,8 @@ import CreateProductForm from "./componenets/CreateProductForm";
 import ProductsTable from "./componenets/ProductsTable";
 import OrdersTable from "./componenets/OrdersTable";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../State/Auth/Action";
+import { getUser, logout } from "../State/Auth/Action";
+import { toast } from "react-toastify";
 
 const menu = [
   { name: "Home", path: "/", icon: <HomeIcon /> },
@@ -41,16 +42,24 @@ const Admin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const { auth } = useSelector((store) => store);
-  if (auth?.user?.role != "admin") {
-    // toast.info("Your not admin")
-    navigate("/");
-  }
+  const jwt = localStorage.getItem("jwt");
+  const { auth} = useSelector((store) => store);
 
-  if(auth?.user === null){
-    // toast.info("Please login")
-    navigate("/")
-  }
+  // Fetch user data using JWT
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getUser(jwt)); // Dispatch action to get user data
+    } else{
+      navigate("/")
+    }
+  }, [jwt, dispatch]);
+
+  // Redirect if auth is invalid or user is not admin
+  useEffect(() => {
+    if (!auth || auth?.user?.role !== "admin") {
+      navigate("/"); // Redirect to home if user is not admin
+    }
+  }, [auth,navigate]);
 
   // Logout function
   const handleLogout = () => {
