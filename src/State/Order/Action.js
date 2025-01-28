@@ -35,8 +35,8 @@ export const createOrder = (reqData) => async (dispatch) => {
     });
     toast.success("Your order in review");
   } catch (error) {
-    console.log("catch error ", error);
-
+    // console.log("catch request ", error.request);
+    // console.log("catch response ", error.response);
     let errorMessage = "An error occurred while creating the order.";
 
     if (error.response && error.response.data && error.response.data.errors) {
@@ -45,18 +45,9 @@ export const createOrder = (reqData) => async (dispatch) => {
         .map((err) => err.defaultMessage)
         .join(", ");
       errorMessage = validationErrors;
-    } else if (
-      error.response &&
-      error.response.data &&
-      error.response.data.errors
-    ) {
-      // Extract validation errors from the response
-      const validationErrors = error.response.data.errors.defaultMessage
-      errorMessage = validationErrors;
-    } else if (error.request) {
+    }else if (error.request) {
       errorMessage = "Network Error: Unable to connect to the server.";
     }
-
     dispatch({
       type: CREATE_ORDER_FAILUER,
       payload: errorMessage,
