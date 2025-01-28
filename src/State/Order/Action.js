@@ -23,35 +23,45 @@ export const createOrder = (reqData) => async (dispatch) => {
 
   try {
     const { data } = await api.post("/api/orders/", reqData.address);
-  
+
     if (data.id) {
       reqData.navigate({ search: `step=2&order_id=${data.id}` });
     }
-  
+
     console.log("create order - ", data);
     dispatch({
       type: CREATE_ORDER_SUCCESS,
       payload: data,
     });
-    toast.success("Your order in review")
+    toast.success("Your order in review");
   } catch (error) {
     console.log("catch error ", error);
-  
+
     let errorMessage = "An error occurred while creating the order.";
-  
+
     if (error.response && error.response.data && error.response.data.errors) {
       // Extract validation errors from the response
-      const validationErrors = error.response.data.errors.map(err => err.defaultMessage).join(", ");
+      const validationErrors = error.response.data.errors
+        .map((err) => err.defaultMessage)
+        .join(", ");
       errorMessage = validationErrors;
-    }else if (error.request) {
+    } else if (
+      error.response &&
+      error.response.data &&
+      error.response.data.errors
+    ) {
+      // Extract validation errors from the response
+      const validationErrors = error.response.data.errors.defaultMessage
+      errorMessage = validationErrors;
+    } else if (error.request) {
       errorMessage = "Network Error: Unable to connect to the server.";
     }
-  
+
     dispatch({
       type: CREATE_ORDER_FAILUER,
       payload: errorMessage,
     });
-    toast.error(errorMessage)
+    toast.error(errorMessage);
   }
 };
 
@@ -75,12 +85,21 @@ export const getOrderById = (orderId) => async (dispatch) => {
       console.log(error.response.data);
 
       // Check for the specific error message in the response
-      if (error.response.data.message === "Query did not return a unique result: 2 results were returned") {
-        errorMessage = "Duplicate data found. Please ensure the data is unique.";
-      } else if (error.response.data.message === "Required header 'Authorization' is not present.") {
+      if (
+        error.response.data.message ===
+        "Query did not return a unique result: 2 results were returned"
+      ) {
+        errorMessage =
+          "Duplicate data found. Please ensure the data is unique.";
+      } else if (
+        error.response.data.message ===
+        "Required header 'Authorization' is not present."
+      ) {
         errorMessage = "You are not logged in. Please log in.";
       } else {
-        errorMessage = error.response.data.message || "Server Error occurred during registration.";
+        errorMessage =
+          error.response.data.message ||
+          "Server Error occurred during registration.";
       }
     } else if (error.request) {
       errorMessage = "Network Error: Unable to connect to the server.";
@@ -115,11 +134,18 @@ export const getOrderByTrackId = (trackId) => async (dispatch) => {
       console.log(error.response.data);
 
       // Check for the specific error message in the response
-      if (error.response.data.message === "Query did not return a unique result: 2 results were returned") {
-        errorMessage = "Duplicate data found. Please ensure the data is unique.";
-      } else if (error.response.data.message === "Required header 'Authorization' is not present.") {
+      if (
+        error.response.data.message ===
+        "Query did not return a unique result: 2 results were returned"
+      ) {
+        errorMessage =
+          "Duplicate data found. Please ensure the data is unique.";
+      } else if (
+        error.response.data.message ===
+        "Required header 'Authorization' is not present."
+      ) {
         errorMessage = "You are not logged in. Please log in.";
-      } else if(error.response.data) {
+      } else if (error.response.data) {
         errorMessage = "Order Not Found";
       }
     } else if (error.request) {
