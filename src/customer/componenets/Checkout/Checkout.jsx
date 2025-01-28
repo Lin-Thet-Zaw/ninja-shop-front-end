@@ -18,12 +18,13 @@ export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
   const location = useLocation();
   const navigate = useNavigate();
-  const { auth } = useSelector((store) => store);
+  const jwt = localStorage.getItem("jwt")
 
-  if (auth?.user === null) {
-    toast.info("Please login");
+  if (auth?.user === null || jwt === null) {
+    toast.info("Plase login");
     navigate("/");
   }
+
 
   useEffect(() => {
     const querySearch = new URLSearchParams(location.search);
